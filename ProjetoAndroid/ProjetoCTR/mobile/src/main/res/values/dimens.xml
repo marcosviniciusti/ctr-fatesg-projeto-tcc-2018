@@ -1,0 +1,45 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="icon_top_margin">24dp</dimen>
+    <dimen name="icon_bottom_margin">24dp</dimen>
+    <dimen name="icon_left_margin">24dp</dimen>
+    <dimen name="icon_right_margin">24dp</dimen>
+
+    <dimen name="title_bottom_margin">16dp</dimen>
+    <dimen name="field_bottom_margin">16dp</dimen>
+    <dimen name="field_width_standard">160dp</dimen>
+    <dimen name="button_bottom_margin">16dp</dimen>
+
+    <!-- Default margins. -->
+    <dimen name="margin_xxp">10dp</dimen>
+    <dimen name="margin_xp">15dp</dimen>
+    <dimen name="margin_dp">20dp</dimen>
+    <dimen name="margin_md">25dp</dimen>
+    <dimen name="margin_lg">30dp</dimen>
+
+    <!-- Default paddins. -->
+    <dimen name="padding_xxp">10dp</dimen>
+    <dimen name="padding_xp">15dp</dimen>
+    <dimen name="padding_dp">20dp</dimen>
+    <dimen name="padding_md">25dp</dimen>
+    <dimen name="padding_lg">30dp</dimen>
+
+    <!-- Default width. -->
+    <dimen name="width_xxp">10dp</dimen>
+    <dimen name="width_xp">15dp</dimen>
+    <dimen name="width_dp">20dp</dimen>
+    <dimen name="width_md">25dp</dimen>
+    <dimen name="width_lg">30dp</dimen>
+
+    <!-- Default heigth. -->
+    <dimen name="heigth_xxp">10dp</dimen>
+    <dimen name="height_xp">15dp</dimen>
+    <dimen name="height_dp">20dp</dimen>
+    <dimen name="height_md">25dp</dimen>
+    <dimen name="height_lg">30dp</dimen>
+
+</resources>
