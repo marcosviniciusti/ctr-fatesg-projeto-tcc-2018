@@ -13,6 +13,7 @@
     <dimen name="field_bottom_margin">16dp</dimen>
     <dimen name="field_width_standard">160dp</dimen>
     <dimen name="button_bottom_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
     <!-- Default margins. -->
     <dimen name="margin_xxp">10dp</dimen>

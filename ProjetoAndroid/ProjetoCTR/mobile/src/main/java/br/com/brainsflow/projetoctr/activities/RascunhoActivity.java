@@ -1,13 +1,19 @@
 package br.com.brainsflow.projetoctr.activities;
 
+import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -54,8 +60,8 @@ public class RascunhoActivity extends AppCompatActivity {
         pGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         // Fazemos a referencia do elemento que irá carregar a imagem.
         commonFoto = (ImageView) findViewById(R.id.commonFoto);
-        textViewEmail = (TextView) findViewById(R.id.textStatusLabel);
-        textViewName = (TextView) findViewById(R.id.textDetailLabel);
+        textViewName = (TextView) findViewById(R.id.textStatusLabel);
+        textViewEmail = (TextView) findViewById(R.id.textDetailLabel);
         buttonSignOutButton = (Button) findViewById(R.id.buttonSignOutButton);
     }
 
@@ -85,11 +91,18 @@ public class RascunhoActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("ResourceType")
     private void loadData() {
 
         FirebaseUser user = mAuth.getCurrentUser();
 
         // Carregamos a imagem no elemento ImageView.
+        // Aqui pegamos a referencia da imagem em string e a transformamos em uma referencia para int
+        int imageResource = R.drawable.firebase_lockup_400;
+
+        // Aqui pega a imagem e trás para tela referenciada
+        Drawable res = ContextCompat.getDrawable(getApplicationContext(), imageResource);
+        // Carregamos a imagem no elemento.
         commonFoto.setImageURI(user.getPhotoUrl());
 
         // Carregamos o nome e e-mail do usuário no TextField.
