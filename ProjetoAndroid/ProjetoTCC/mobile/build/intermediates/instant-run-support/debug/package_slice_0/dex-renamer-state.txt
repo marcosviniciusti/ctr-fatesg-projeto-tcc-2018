@@ -1,0 +1,4 @@
+#Fri Mar 09 18:31:09 BRT 2018
+base.0=/media/marcos/Backup/Documentos/AndroidStudioProjects/Estudos/ProjetoTCC/mobile/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
