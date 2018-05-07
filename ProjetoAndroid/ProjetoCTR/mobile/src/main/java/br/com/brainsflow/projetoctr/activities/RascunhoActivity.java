@@ -1,9 +1,12 @@
 package br.com.brainsflow.projetoctr.activities;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -13,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,13 +25,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.BufferedInputStream;
+import java.io.FilterInputStream;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
 import br.com.brainsflow.projetoctr.R;
 
 public class RascunhoActivity extends AppCompatActivity {
 
+    private final String TAG = "RascunhoActivity";
+
     // [START declare_auth]
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleSignInClient pGoogleSignInClient;
     // [END declare_auth]
 
@@ -99,14 +110,41 @@ public class RascunhoActivity extends AppCompatActivity {
         // Carregamos a imagem no elemento ImageView.
         // Aqui pegamos a referencia da imagem em string e a transformamos em uma referencia para int
         int imageResource = R.drawable.firebase_lockup_400;
-
         // Aqui pega a imagem e trás para tela referenciada
         Drawable res = ContextCompat.getDrawable(getApplicationContext(), imageResource);
+
         // Carregamos a imagem no elemento.
-        commonFoto.setImageURI(user.getPhotoUrl());
+        Log.w(TAG, "URL: "+user.getPhotoUrl());
+        Bitmap bitmap = getImageBitmap(user.getPhotoUrl().toString());
+        commonFoto.setImageBitmap(bitmap);
 
         // Carregamos o nome e e-mail do usuário no TextField.
         textViewName.setText(user.getDisplayName());
         textViewEmail.setText(user.getEmail());
     }
+
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            //StrictMode.setThreadPolicy(policy);
+
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting bitmap: "+e.getMessage(), e);
+        } catch (Exception erro) {
+            Log.e(TAG, "Error: "+erro.getMessage(), erro);
+        }
+        return bm;
+    }
+
+
+
 }

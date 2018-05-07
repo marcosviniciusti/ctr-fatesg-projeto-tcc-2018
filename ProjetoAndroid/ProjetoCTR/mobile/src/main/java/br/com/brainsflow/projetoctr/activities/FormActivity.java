@@ -8,17 +8,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import br.com.brainsflow.projetoctr.R;
-import br.com.brainsflow.projetoctr.entities.Definition;
+import br.com.brainsflow.projetoctr.entities.EDefinition;
 //import br.com.brainsflow.projetoctr.util.StableArrayAdapter;
 
 public class FormActivity extends AppCompatActivity {
@@ -31,7 +26,7 @@ public class FormActivity extends AppCompatActivity {
     private Spinner spComputer;
     private Button btnSalvar;
     private Button btnCancelar;
-    private Definition definicao;
+    private EDefinition definicao;
     private ArrayList<String> lista;
 
     @Override
@@ -52,7 +47,7 @@ public class FormActivity extends AppCompatActivity {
         spComputer = (Spinner) findViewById(R.id.spComputer);
         btnSalvar = (Button) findViewById(R.id.btnSave);
         btnCancelar = (Button) findViewById(R.id.btnCancel);
-        definicao = new Definition();
+        definicao = new EDefinition();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         lista = bundle.getStringArrayList("listaString");
@@ -171,7 +166,7 @@ public class FormActivity extends AppCompatActivity {
         lista.add(datashowResolution);
         lista.add(computer);
 
-        //  Insere os dados no objeto Definition
+        //  Insere os dados no objeto EDefinition
         /*definicao.setName(nome);
         definicao.setDatashow(datashow);
         definicao.setDatashowOrientation(datashowOrientation);
@@ -179,7 +174,7 @@ public class FormActivity extends AppCompatActivity {
         definicao.setComputer(computer);*/
 
         // Adiciona o objeto na listView
-        /*ArrayList<Definition> lista = new ArrayList<>();
+        /*ArrayList<EDefinition> lista = new ArrayList<>();
         lista.add(definicao);*/
 
         /*
@@ -200,7 +195,7 @@ public class FormActivity extends AppCompatActivity {
 
         //  Grava o objeto no dispositivo
         /*DefinitionDao definition = new DefinitionDao();
-        ArrayList<Definition> lista = new ArrayList<>();
+        ArrayList<EDefinition> lista = new ArrayList<>();
         lista.add(definicao);
         StableArrayAdapter adapter = new StableArrayAdapter
                 (this.getApplicationContext(), R.layout.content_listview,lista);*/// Cria um object e seta os parametros no adapter

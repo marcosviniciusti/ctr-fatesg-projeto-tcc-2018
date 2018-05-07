@@ -1,0 +1,11 @@
+#Internal package file, do not edit.
+#Fri May 04 15:47:55 BRT 2018
+1.base=/media/marcos/Backup/Documentos/AndroidStudioProjects/Estudos/ProjetoCTR/mobile/build/intermediates/transforms/dexMerger/debug/44
+0.baseType=DIRECTORY
+1.baseType=DIRECTORY
+count=2
+1.set=DEX
+0.path=crashlytics-build.properties
+0.set=ASSET
+0.base=/media/marcos/Backup/Documentos/AndroidStudioProjects/Estudos/ProjetoCTR/mobile/build/intermediates/assets/debug
+1.path=classes.dex

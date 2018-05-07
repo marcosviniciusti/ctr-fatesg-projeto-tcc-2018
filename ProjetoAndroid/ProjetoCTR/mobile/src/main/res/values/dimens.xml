@@ -42,5 +42,7 @@
     <dimen name="height_dp">20dp</dimen>
     <dimen name="height_md">25dp</dimen>
     <dimen name="height_lg">30dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
 
 </resources>

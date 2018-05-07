@@ -1,42 +1,50 @@
 package br.com.brainsflow.projetoctr.business;
 
+import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import br.com.brainsflow.projetoctr.R;
 
-public class bLogin {
+public class BLogin extends AppCompatActivity {
 
-    private boolean isFormValid(String email, String password) {
-        return isEmailValid(email)
-                && isPasswordValid(password);
+    public boolean hasAuth(FirebaseAuth mAuth) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    private boolean isEmailValid(String email) {
+    public String[] isFormValid(String email, String password, Activity activity) {
+        return new String[]{isEmailValid(email, activity), isPasswordValid(password, activity)};
+    }
+
+    private String isEmailValid(String email, Activity activity) {
         //TODO: Substitua isso pela sua própria lógica
-        boolean valid;
+        String erro = "";
         if (TextUtils.isEmpty(email)) {
-            valid = false;
+            erro = (String) activity.getString(R.string.error_field_required);
         } else if (!email.contains("@")) {
-            valid = false;
-        } else {
-            valid = true;
+            erro = (String) activity.getString(R.string.error_invalid_email);
         }
 
-        return valid;
+        return erro;
     }
 
-    private boolean isPasswordValid(String password) {
+    private String isPasswordValid(String password, Activity activity) {
         //TODO: Substitua isso pela sua própria lógica
-        boolean valid;
+        String erro = "";
         if (TextUtils.isEmpty(password)) {
-            valid = false;
+            erro = (String) activity.getString(R.string.error_field_required);
         } else if (password.length() < 6) {
-            valid = false;
-        } else {
-            valid = true;
+            erro = (String) activity.getString(R.string.error_invalid_password);
         }
 
-        return valid;
+        return erro;
     }
 }
