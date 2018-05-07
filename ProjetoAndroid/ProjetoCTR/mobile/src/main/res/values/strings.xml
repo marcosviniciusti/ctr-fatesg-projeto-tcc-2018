@@ -41,6 +41,7 @@
     <string name="action_settings">Opções</string>
     <string name="action_save">Salvar</string>
     <string name="action_cancel">Cancelar</string>
+    <string name="action_update">Atualizar</string>
 
     <string name="status_signed_in">Conectado</string>
     <string name="status_signed_out">Desconectado</string>

@@ -40,8 +40,8 @@ import br.com.brainsflow.projetoctr.business.BLogin;
 public class AuthActivity extends BaseActivity {
 
     // Atributos da biblioteca do firebase.
-    private FirebaseAuth mAuth;
-    private GoogleSignInClient pGoogleSignInClient;
+    private FirebaseAuth auth;
+    private GoogleSignInClient googleSignInClient;
 
     // Atributos da classe.
     private static final String TAG = "AuthActivity";
@@ -51,8 +51,6 @@ public class AuthActivity extends BaseActivity {
     // Referencias da UI.
     private View containerScrollView;
     private View widgetProgressBar;
-    private TextView textStatusLabel;
-    private TextView textDetailLabel;
     private EditText textFieldEmail;
     private EditText textFieldPassword;
     private Button buttonCreateButton;
@@ -71,22 +69,20 @@ public class AuthActivity extends BaseActivity {
     // Inicializa os atributos.
     public void bind() {
         // Instacia atributo da biblioteca do Firebase.
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         // Configura o login pelo Google
         // [START]
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        pGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
         //  [END]
         bLogin = new BLogin(); // Inicializa variável de negócios do login.
         // Inicializa os componentes da interface.
         //  [START]
         containerScrollView = findViewById(R.id.containerScrollView);
         widgetProgressBar = findViewById(R.id.widgetProgressBar);
-        textStatusLabel = findViewById(R.id.textStatusLabel);
-        textDetailLabel = findViewById(R.id.textDetailLabel);
         textFieldEmail = (EditText) findViewById(R.id.textFieldEmail);
         textFieldPassword = (EditText) findViewById(R.id.textFieldPassword);
         buttonCreateButton = (Button) findViewById(R.id.buttonCreateAccount);
@@ -125,8 +121,8 @@ public class AuthActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         // Imprime no log o resultado da existencia de uma autentificação.
-        Log.d(TAG, "METHOD: hasAuth(): "+bLogin.hasAuth(mAuth));
-        checkAuth(bLogin.hasAuth(mAuth));
+        Log.d(TAG, "METHOD: hasAuth(): "+bLogin.hasAuth(auth));
+        checkAuth(bLogin.hasAuth(auth));
     }
 
     // Verifica se existe alguma autentificação e atualiza a interface de acordo.
@@ -169,14 +165,14 @@ public class AuthActivity extends BaseActivity {
         } else {
             showProgressDialog();
 
-            mAuth.createUserWithEmailAndPassword(email, password)
+            auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "createUserWithEmail:success");
-                                checkAuth(bLogin.hasAuth(mAuth));
+                                checkAuth(bLogin.hasAuth(auth));
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -196,7 +192,7 @@ public class AuthActivity extends BaseActivity {
     // Envia E-mail de verificação.
     private void sendEmailVerification() {
 
-        final FirebaseUser user = mAuth.getCurrentUser();
+        final FirebaseUser user = auth.getCurrentUser();
         user.sendEmailVerification()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
@@ -249,15 +245,15 @@ public class AuthActivity extends BaseActivity {
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
+        auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            checkAuth(bLogin.hasAuth(mAuth));
+                            FirebaseUser user = auth.getCurrentUser();
+                            checkAuth(bLogin.hasAuth(auth));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -277,7 +273,7 @@ public class AuthActivity extends BaseActivity {
     private void signIn(View view) {
         int i = view.getId();
         if (i == R.id.buttonSignInGoogle) {
-            Intent signInIntent = pGoogleSignInClient.getSignInIntent();
+            Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         } else {
             String email = textFieldEmail.getText().toString();
@@ -298,14 +294,14 @@ public class AuthActivity extends BaseActivity {
                 showProgressDialog();
 
                 // [START sign_in_with_email]
-                mAuth.signInWithEmailAndPassword(email, password)
+                auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail:success");
-                                    checkAuth(bLogin.hasAuth(mAuth));
+                                    checkAuth(bLogin.hasAuth(auth));
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure: " + task.getException().getMessage(), task.getException());
@@ -335,10 +331,10 @@ public class AuthActivity extends BaseActivity {
     // Sair da conta do usuário no aplicativo.
     private void signOut() {
         // Firebase sign out
-        mAuth.signOut();
+        auth.signOut();
 
         // Google sign out
-        pGoogleSignInClient.signOut().addOnCompleteListener(this,
+        googleSignInClient.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -349,10 +345,10 @@ public class AuthActivity extends BaseActivity {
 
     private void revokeAccess() {
         // Firebase sign out
-        mAuth.signOut();
+        auth.signOut();
 
         // Google revoke access
-        pGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
+        googleSignInClient.revokeAccess().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

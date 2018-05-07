@@ -1,20 +1,28 @@
 package br.com.brainsflow.projetoctr.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,6 +31,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import br.com.brainsflow.projetoctr.R;
 
@@ -30,25 +45,28 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     // Atributos da biblioteca do firebase.
-    private FirebaseAuth mAuth;
-    private GoogleSignInClient pGoogleSignInClient;
+    private FirebaseAuth auth;
+    private GoogleSignInClient googleSignInClient;
+    private FirebaseAnalytics firebaseAnalytics;
 
     // Atributos da classe.
     private static final String TAG = "MainActivity";
-    private FirebaseAnalytics mFirebaseAnalytics ;
     private final String URL_GET = "/home/marcos/";
     private final String URL_POST = "/home/marcos/";
     private final String URL_PUT = "/home/marcos/";
     private final String URL_DELETE = "/home/marcos/";
     private final String URL_REQUEST = "/home/marcos/";
-    private FloatingActionButton btnAdd;
-    private ListView listView;
 
     //  Referencias da UI.
-    Toolbar toolbar;
-    DrawerLayout drawer;
-    ActionBarDrawerToggle toggle;
-    NavigationView navigationView;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
+    private NavigationView navigationView;
+    private ImageView imageView;
+    private TextView textViewName;
+    private TextView textViewEmail;
+    private FloatingActionButton buttonAdd;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +84,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void bindView() {
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
-        pGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
         // Obter a instância FirebaseAnalytics.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        //  Obter a instância da listView da tela.
-        listView = (ListView) findViewById(R.id.listViewDefinition);
-        //  Obter a instância do botão flutuante da tela.
-        btnAdd = (FloatingActionButton) findViewById(R.id.btnAdd);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.status_navigation_drawer_open, R.string.status_navigation_drawer_close);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        imageView = (ImageView) findViewById(R.id.imageView);
+        textViewName = (TextView) findViewById(R.id.textFieldNameUser);
+        textViewEmail = (TextView) findViewById(R.id.textFieldEmailUser);
+
+        //  Obter a instância da listView da tela.
+        listView = (ListView) findViewById(R.id.listViewDefinition);
+        //  Obter a instância do botão flutuante da tela.
+        buttonAdd = (FloatingActionButton) findViewById(R.id.buttonAdd);
     }
 
     private void createEvents() {
@@ -92,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -134,8 +158,50 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void loadData() {
+
+        FirebaseUser user = auth.getCurrentUser();
+
+        // Carregamos a imagem no elemento ImageView.
+        // Aqui pegamos a referencia da imagem em string e a transformamos em uma referencia para int
+        int imageResource = R.drawable.firebase_lockup_400;
+        // Aqui pega a imagem e trás para tela referenciada
+        Drawable res = ContextCompat.getDrawable(getApplicationContext(), imageResource);
+
+        // Carregamos a imagem no elemento.
+        Log.w(TAG, "URL: "+user.getPhotoUrl());
+        Bitmap bitmap = getImageBitmap(user.getPhotoUrl().toString());
+        imageView.setImageBitmap(bitmap);
+
+        // Carregamos o nome e e-mail do usuário no TextField.
+        textViewName.setText(user.getDisplayName());
+        textViewEmail.setText(user.getEmail());
+    }
+
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting bitmap: "+e.getMessage(), e);
+        } catch (Exception erro) {
+            Log.e(TAG, "Error: "+erro.getMessage(), erro);
+        }
+        return bm;
+    }
+
     private void monitorarBotãoFlutuante() {
-        String id =  "btnAdd";
+        String id =  "buttonAdd";
         String name = "adicionar definição";
 
         // [START FloatingActionButton_view_event]
@@ -143,7 +209,7 @@ public class MainActivity extends AppCompatActivity
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         // [END FloatingActionButton_view_event]
     }
 
@@ -180,11 +246,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_connect) {
+            if (id == R.id.buttonConnect) {
             // Método de conectar com o arduino.
             return true;
         }
-        if (id == R.id.action_disconnect) {
+        if (id == R.id.buttonDisconnect) {
             // Método de desconectar do arduino
             return true;
         }
@@ -194,12 +260,12 @@ public class MainActivity extends AppCompatActivity
 
     private void signOut() {
         // Firebase sign out
-        if (mAuth != null)
-            mAuth.signOut();
+        if (auth != null)
+            auth.signOut();
 
         // Google sign out
-        if (pGoogleSignInClient != null)
-            pGoogleSignInClient.signOut().addOnCompleteListener(this,
+        if (googleSignInClient != null)
+            googleSignInClient.signOut().addOnCompleteListener(this,
                     new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

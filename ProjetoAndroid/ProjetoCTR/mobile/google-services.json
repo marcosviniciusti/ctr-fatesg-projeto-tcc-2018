@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1014430692355",
+    "firebase_url": "https://projeto-tcc-bcde1.firebaseio.com",
+    "project_id": "projeto-tcc-bcde1",
+    "storage_bucket": "projeto-tcc-bcde1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014430692355:android:ca266f5456816280",
+        "android_client_info": {
+          "package_name": "br.com.brainsflow.projetoctr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014430692355-0nml7sj3p79rriq9dbtktc6h798mfmgl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.brainsflow.projetoctr",
+            "certificate_hash": "acb7396a48d4788a73aac67c08cac3ad4ff0e433"
+          }
+        },
+        {
+          "client_id": "1014430692355-quvce3jqs02ed3p3snn4hjuetntmmtga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTBPXg4PBZ1NdJ45Hy9080tgAxMTTPk80"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014430692355-quvce3jqs02ed3p3snn4hjuetntmmtga.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

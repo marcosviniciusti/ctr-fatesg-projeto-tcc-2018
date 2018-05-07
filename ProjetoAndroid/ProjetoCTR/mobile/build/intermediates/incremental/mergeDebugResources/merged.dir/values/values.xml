@@ -1044,6 +1044,7 @@
     <string name="action_sign_in_register">Entrar ou Registrar</string>
     <string name="action_sign_out">Sair</string>
     <string name="action_stop">Parar</string>
+    <string name="action_update">Atualizar</string>
     <string name="action_verify_email">Verificar Email</string>
     <string name="app_name">Projeto CTR</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
