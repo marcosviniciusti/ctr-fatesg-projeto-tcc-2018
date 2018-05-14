@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/Estudos/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-ta/values-ta.xml",
+            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-ta/values-ta.xml",
             "map": [
                 {
                     "source": "/home/marcos/.gradle/caches/transforms-1/files-1.1/facebook-login-4.27.0.aar/c43d2041b4751ea84fd224d96693efe6/res/values-ta/values-ta.xml",

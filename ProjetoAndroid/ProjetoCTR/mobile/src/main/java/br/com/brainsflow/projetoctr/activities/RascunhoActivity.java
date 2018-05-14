@@ -144,7 +144,4 @@ public class RascunhoActivity extends AppCompatActivity {
         }
         return bm;
     }
-
-
-
 }

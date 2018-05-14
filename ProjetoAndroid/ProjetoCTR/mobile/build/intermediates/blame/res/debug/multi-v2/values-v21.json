@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/Estudos/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v21/values-v21.xml",
+            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v21/values-v21.xml",
             "map": [
                 {
                     "source": "/home/marcos/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.0.aar/a41b66bb39c8ec6174f0fe3821dc5604/res/values-v21/values-v21.xml",

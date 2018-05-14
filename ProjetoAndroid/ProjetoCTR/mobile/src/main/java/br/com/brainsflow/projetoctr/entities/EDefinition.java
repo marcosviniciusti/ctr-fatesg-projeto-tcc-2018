@@ -1,10 +1,12 @@
 package br.com.brainsflow.projetoctr.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by marcos on 02/03/18.
  */
 
-public class EDefinition {
+public class EDefinition implements Serializable {
 
     private String name;
     private String temperaturaAr;

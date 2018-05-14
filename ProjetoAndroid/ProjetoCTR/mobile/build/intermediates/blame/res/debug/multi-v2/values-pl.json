@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/Estudos/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pl/values-pl.xml",
+            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pl/values-pl.xml",
             "map": [
                 {
                     "source": "/home/marcos/.gradle/caches/transforms-1/files-1.1/play-services-base-11.8.0.aar/f2ef0515742ad24651ddf0e19e7cb215/res/values-pl/values.xml",

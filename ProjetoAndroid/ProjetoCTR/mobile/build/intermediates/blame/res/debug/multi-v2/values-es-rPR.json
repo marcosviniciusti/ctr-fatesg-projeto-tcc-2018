@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/Estudos/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-es-rPR/values-es-rPR.xml",
+            "outputFile": "/media/marcos/Backup/Documentos/AndroidStudioProjects/ProjetoCTR/mobile/build/intermediates/incremental/mergeDebugResources/merged.dir/values-es-rPR/values-es-rPR.xml",
             "map": [
                 {
                     "source": "/home/marcos/.gradle/caches/transforms-1/files-1.1/firebase-ui-auth-3.2.2.aar/8af9e385257ed8b41b58ca4fe8e00370/res/values-es-rPR/values-es-rPR.xml",

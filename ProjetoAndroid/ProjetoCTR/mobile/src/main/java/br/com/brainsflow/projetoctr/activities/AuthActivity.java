@@ -39,15 +39,6 @@ import br.com.brainsflow.projetoctr.business.BLogin;
  */
 public class AuthActivity extends BaseActivity {
 
-    // Atributos da biblioteca do firebase.
-    private FirebaseAuth auth;
-    private GoogleSignInClient googleSignInClient;
-
-    // Atributos da classe.
-    private static final String TAG = "AuthActivity";
-    private static final int RC_SIGN_IN = 9001;
-    private BLogin bLogin;
-
     // Referencias da UI.
     private View containerScrollView;
     private View widgetProgressBar;
@@ -57,6 +48,14 @@ public class AuthActivity extends BaseActivity {
     private Button buttonSignInButton;
     private SignInButton buttonSignInGoogle;
 
+    // Atributos da classe.
+    private static final String TAG = "AuthActivity";
+    private static final int RC_SIGN_IN = 9001;
+    private BLogin bLogin;
+
+    // Atributos da biblioteca do firebase.
+    private FirebaseAuth auth;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

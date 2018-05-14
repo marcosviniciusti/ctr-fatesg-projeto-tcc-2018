@@ -1,6 +1,8 @@
 package br.com.brainsflow.projetoctr.entities;
 
-public class EIR {
+import java.io.Serializable;
+
+public class EIR implements Serializable{
 
     private String codHex;
     private int[] pulse;

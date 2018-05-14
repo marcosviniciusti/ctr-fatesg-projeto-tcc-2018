@@ -32,6 +32,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -40,22 +45,10 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import br.com.brainsflow.projetoctr.R;
+import br.com.brainsflow.projetoctr.entities.EDefinition;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    // Atributos da biblioteca do firebase.
-    private FirebaseAuth auth;
-    private GoogleSignInClient googleSignInClient;
-    private FirebaseAnalytics firebaseAnalytics;
-
-    // Atributos da classe.
-    private static final String TAG = "MainActivity";
-    private final String URL_GET = "/home/marcos/";
-    private final String URL_POST = "/home/marcos/";
-    private final String URL_PUT = "/home/marcos/";
-    private final String URL_DELETE = "/home/marcos/";
-    private final String URL_REQUEST = "/home/marcos/";
 
     //  Referencias da UI.
     private Toolbar toolbar;
@@ -68,6 +61,22 @@ public class MainActivity extends AppCompatActivity
     private FloatingActionButton buttonAdd;
     private ListView listView;
 
+    // Atributos da classe.
+    private static final String TAG = "MainActivity";
+    private final String URL_GET = "/home/marcos/";
+    private final String URL_POST = "/home/marcos/";
+    private final String URL_PUT = "/home/marcos/";
+    private final String URL_DELETE = "/home/marcos/";
+    private final String URL_REQUEST = "/home/marcos/";
+
+    // Atributos da biblioteca do Firebase.
+    private FirebaseAuth auth;
+    private GoogleSignInClient googleSignInClient;
+    private FirebaseAnalytics firebaseAnalytics;
+    // Referenciando o banco de dados do Firebase.
+    FirebaseDatabase database;
+    DatabaseReference ctrRef, defRef, remoteRef, groupRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //  Função que inicializa os atributos
+        //  Função que instancia os atributos da interface e atributos da classe.
         bindView();
         //  Função que cria eventos dos componentes
         createEvents();
@@ -84,30 +93,36 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void bindView() {
-        auth = FirebaseAuth.getInstance();
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        // [END config_signin]
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-        // Obter a instância FirebaseAnalytics.
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
+        // Referencia instancias da interface.
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.status_navigation_drawer_open, R.string.status_navigation_drawer_close);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-
         imageView = (ImageView) findViewById(R.id.imageView);
         textViewName = (TextView) findViewById(R.id.textFieldNameUser);
         textViewEmail = (TextView) findViewById(R.id.textFieldEmailUser);
-
-        //  Obter a instância da listView da tela.
         listView = (ListView) findViewById(R.id.listViewDefinition);
-        //  Obter a instância do botão flutuante da tela.
         buttonAdd = (FloatingActionButton) findViewById(R.id.buttonAdd);
+
+        // Referencia a instancia de autenticação do Firebase.
+        auth = FirebaseAuth.getInstance();
+        // Configura o Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // Referencia a instancia de autenticação do Firebase pela Google.
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+        // Referencia a instância do Analytics do Firebase.
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        // Referencia a instância do banco de dados do Firebase.
+        database = FirebaseDatabase.getInstance();
+
+        // Referencia nós do banco de dados.
+        ctrRef = database.getReference().child("ctr");
+        defRef = ctrRef.child("definition");
+        remoteRef = ctrRef.child("remote");
+        groupRef = ctrRef.child("group");
     }
 
     private void createEvents() {
@@ -154,6 +169,74 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+            }
+        });
+
+        // Ler o banco de dados
+        ctrRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Este método é chamado uma vez com o valor inicial e novamente
+                // sempre que os dados neste local forem atualizados.
+                //String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + "CTR");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+        // Ler o banco de dados
+        defRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Este método é chamado uma vez com o valor inicial e novamente
+                // sempre que os dados neste local forem atualizados.
+                EDefinition value = dataSnapshot.getValue(EDefinition.class);
+                Log.d(TAG, "Value is: " + "EDefinition");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+        // Ler o banco de dados
+        remoteRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Este método é chamado uma vez com o valor inicial e novamente
+                // sempre que os dados neste local forem atualizados.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + "remote");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+        // Ler o banco de dados
+        groupRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Este método é chamado uma vez com o valor inicial e novamente
+                // sempre que os dados neste local forem atualizados.
+                String value = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + "Group");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
     }

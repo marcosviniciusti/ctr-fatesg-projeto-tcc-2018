@@ -10,6 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 import br.com.brainsflow.projetoctr.R;
@@ -18,6 +26,7 @@ import br.com.brainsflow.projetoctr.entities.EDefinition;
 
 public class FormActivity extends AppCompatActivity {
 
+    //  Referencias da UI.
     private EditText txtNome;
     private Spinner spArcondicionado;
     private Spinner spDatashow;
@@ -26,8 +35,18 @@ public class FormActivity extends AppCompatActivity {
     private Spinner spComputer;
     private Button btnSalvar;
     private Button btnCancelar;
+
+    //  Atributos da classe.
     private EDefinition definicao;
     private ArrayList<String> lista;
+
+    // Atributos da biblioteca do Firebase.
+    private FirebaseAuth auth;
+    private GoogleSignInClient googleSignInClient;
+    private FirebaseAnalytics firebaseAnalytics;
+    // Referenciando o banco de dados do Firebase.
+    FirebaseDatabase database;
+    DatabaseReference ctrRef, defRef, remoteRef, groupRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +66,29 @@ public class FormActivity extends AppCompatActivity {
         spComputer = (Spinner) findViewById(R.id.spComputer);
         btnSalvar = (Button) findViewById(R.id.btnSave);
         btnCancelar = (Button) findViewById(R.id.btnCancel);
+
         definicao = new EDefinition();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         lista = bundle.getStringArrayList("listaString");
+
+        // Referencia a instancia de autenticação do Firebase.
+        auth = FirebaseAuth.getInstance();
+        // Configura o Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // Referencia a instancia de autenticação do Firebase pela Google.
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+        // Referencia a instância do banco de dados do Firebase.
+        database = FirebaseDatabase.getInstance();
+
+        // Referencia nós do banco de dados.
+        ctrRef = database.getReference().child("ctr");
+        defRef = ctrRef.child("definition");
+        remoteRef = ctrRef.child("remote");
+        groupRef = ctrRef.child("group");
     }
 
     public void loadSpinner() {
