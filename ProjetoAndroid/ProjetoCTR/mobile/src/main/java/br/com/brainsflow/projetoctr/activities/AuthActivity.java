@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -42,11 +41,11 @@ public class AuthActivity extends BaseActivity {
     // Referencias da UI.
     private View containerScrollView;
     private View widgetProgressBar;
-    private EditText textFieldEmail;
-    private EditText textFieldPassword;
-    private Button buttonCreateButton;
-    private Button buttonSignInButton;
-    private SignInButton buttonSignInGoogle;
+    private EditText txtEmail;
+    private EditText txtPassword;
+    private Button btnCreateButton;
+    private Button btnSignInButton;
+    private SignInButton btnSignInGoogle;
 
     // Atributos da classe.
     private static final String TAG = "AuthActivity";
@@ -82,25 +81,25 @@ public class AuthActivity extends BaseActivity {
         //  [START]
         containerScrollView = findViewById(R.id.containerScrollView);
         widgetProgressBar = findViewById(R.id.widgetProgressBar);
-        textFieldEmail = (EditText) findViewById(R.id.textFieldEmail);
-        textFieldPassword = (EditText) findViewById(R.id.textFieldPassword);
-        buttonCreateButton = (Button) findViewById(R.id.buttonCreateAccount);
-        buttonSignInButton = (Button) findViewById(R.id.buttonSignIn);
-        buttonSignInGoogle = (SignInButton) findViewById(R.id.buttonSignInGoogle);
+        txtEmail = (EditText) findViewById(R.id.txtEmail);
+        txtPassword = (EditText) findViewById(R.id.txtPassword);
+        btnCreateButton = (Button) findViewById(R.id.btnCreateAccount);
+        btnSignInButton = (Button) findViewById(R.id.btnSignIn);
+        btnSignInGoogle = (SignInButton) findViewById(R.id.btnSignInGoogle);
         //  [END]
     }
 
     // Cria eventos;
     public void creatEvent() {
         // Cria o evento de ação de clicar no botão
-        buttonCreateButton.setOnClickListener(new View.OnClickListener() {
+        btnCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createCount(); // tenta conectar no sistema.
             }
         });
 
-        buttonSignInButton.setOnClickListener(new View.OnClickListener() {
+        btnSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn(view); // tenta conectar no sistema.
@@ -108,7 +107,7 @@ public class AuthActivity extends BaseActivity {
         });
 
         // Cria o evento de ação de clicar no botão
-        buttonSignInGoogle.setOnClickListener(new View.OnClickListener() {
+        btnSignInGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn(view); // tenta conectar no sistema.
@@ -133,8 +132,8 @@ public class AuthActivity extends BaseActivity {
 //            findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
         } else {
             showProgress(false); // Oculta pop-ups de carregamento.
-            textFieldEmail.setText(null);
-            textFieldPassword.setText(null);
+            txtEmail.setText(null);
+            txtPassword.setText(null);
         }
     }
 
@@ -148,18 +147,18 @@ public class AuthActivity extends BaseActivity {
 
     // Cria uma conta de usuário do aplicativo.
     private void createCount() {
-        String email = textFieldEmail.getText().toString();
-        String password = textFieldPassword.getText().toString();
+        String email = txtEmail.getText().toString();
+        String password = txtPassword.getText().toString();
         Log.d(TAG, "METHOD: createCount - email: "+email+" password: "+password);
 
         String[] result = bLogin.isFormValid(email, password, this);
         if (!result[0].isEmpty()) {
-            textFieldEmail.setError(result[0]);
-            textFieldEmail.requestFocus();
+            txtEmail.setError(result[0]);
+            txtEmail.requestFocus();
             return;
         } else if (!result[1].isEmpty()) {
-            textFieldPassword.setError(result[1]);
-            textFieldPassword.requestFocus();
+            txtPassword.setError(result[1]);
+            txtPassword.requestFocus();
             return;
         } else {
             showProgressDialog();
@@ -271,22 +270,22 @@ public class AuthActivity extends BaseActivity {
     // Entra na do usuário inserido no formulário.
     private void signIn(View view) {
         int i = view.getId();
-        if (i == R.id.buttonSignInGoogle) {
+        if (i == R.id.btnSignInGoogle) {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         } else {
-            String email = textFieldEmail.getText().toString();
-            String password = textFieldPassword.getText().toString();
+            String email = txtEmail.getText().toString();
+            String password = txtPassword.getText().toString();
             Log.d(TAG, "signIn:" + email);
 
             String[] result = bLogin.isFormValid(email, password, this);
             if (!result[0].isEmpty()){
-                textFieldEmail.setError(result[0]);
-                textFieldEmail.requestFocus();
+                txtEmail.setError(result[0]);
+                txtEmail.requestFocus();
                 return;
             } else if (!result[1].isEmpty()) {
-                textFieldPassword.setError(result[1]);
-                textFieldPassword.requestFocus();
+                txtPassword.setError(result[1]);
+                txtPassword.requestFocus();
                 return;
             } else {
 
@@ -305,11 +304,11 @@ public class AuthActivity extends BaseActivity {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure: " + task.getException().getMessage(), task.getException());
                                     if (task.getException().getMessage().equals(getString(R.string.error_message_email))) {
-                                        textFieldEmail.setError(getString(R.string.error_incorrect_email));
-                                        textFieldEmail.requestFocus();
+                                        txtEmail.setError(getString(R.string.error_incorrect_email));
+                                        txtEmail.requestFocus();
                                     } else if (task.getException().getMessage().equals(getString(R.string.error_message_password))) {
-                                        textFieldPassword.setError(getString(R.string.error_incorrect_password));
-                                        textFieldPassword.requestFocus();
+                                        txtPassword.setError(getString(R.string.error_incorrect_password));
+                                        txtPassword.requestFocus();
                                     } else {
                                         Toast.makeText(AuthActivity.this, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();

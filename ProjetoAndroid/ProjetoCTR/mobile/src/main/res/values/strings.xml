@@ -1,100 +1,90 @@
 <resources>
 
-    <string name="app_name">Projeto CTR</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string nome="app_name">Projeto CTR</string>
+    <string nome="title_activity_main">MainActivity</string>
 
     <!-- Strings related to login -->
-    <string name="hint_name">Nome do Usuário</string>
-    <string name="hint_email">E-mail do Usuário</string>
-    <string name="hint_phone_number">Número de telefone</string>
-    <string name="hint_verification_code">Código de verificação</string>
-    <string name="hint_user_id">User ID</string>
-    <string name="hint_password">Senha</string>
-    <string name="hint_name_definition">Nome da Definição:</string>
-    <string name="hint_nav_header_desc">Navigation header</string>
+    <string nome="hint_name">Nome do Usuário</string>
+    <string nome="hint_email">E-mail do Usuário</string>
+    <string nome="hint_phone_number">Número de telefone</string>
+    <string nome="hint_verification_code">Código de verificação</string>
+    <string nome="hint_user_id">User ID</string>
+    <string nome="hint_password">Senha</string>
+    <string nome="hint_name_definition">Nome da Definição:</string>
+    <string nome="hint_nav_header_desc">Navigation header</string>
 
-    <string name="text_email">E-mail:</string>
-    <string name="text_password">Senha:</string>
-    <string name="text_phone_number">Número de telefone:</string>
-    <string name="text_verification_code">Código de verificação:</string>
-    <string name="text_user_id">User ID:</string>
-    <string name="text_email_password_title">Email and Password</string>
-    <string name="text_email_password_status_fmt">Email User: %1$s (verified: %2$b)</string>
-    <string name="text_facebook_title">Facebook Login</string>
-    <string name="text_facebook_status_fmt">Facebook User: %s</string>
-    <string name="text_firebase_status_fmt">Firebase User: %s</string>
-    <string name="text_google_title">Google Sign In</string>
-    <string name="text_google_status_fmt">Google User: %s</string>
+    <string nome="text_email">E-mail:</string>
+    <string nome="text_password">Senha:</string>
+    <string nome="text_phone_number">Número de telefone:</string>
+    <string nome="text_verification_code">Código de verificação:</string>
+    <string nome="text_user_id">User ID:</string>
+    <string nome="text_email_password_title">Email and Password</string>
+    <string nome="text_email_password_status_fmt">Email User: %1$s (verified: %2$b)</string>
+    <string nome="text_facebook_title">Facebook Login</string>
+    <string nome="text_facebook_status_fmt">Facebook User: %s</string>
+    <string nome="text_firebase_status_fmt">Firebase User: %s</string>
+    <string nome="text_google_title">Google Sign In</string>
+    <string nome="text_google_status_fmt">Google User: %s</string>
 
-    <string name="desc_icon_app">Firebase logo and name</string>
+    <string nome="desc_icon_app">Firebase logo and nome</string>
 
-    <string name="action_create_account">Criar Conta</string>
-    <string name="action_send_link">Enviar Link</string>
-    <string name="action_verify_email">Verificar Email</string>
-    <string name="action_sign_in_register">Entrar ou Registrar</string>
-    <string name="action_sign_in">Entrar</string>
-    <string name="action_sign_out">Sair</string>
-    <string name="action_connect">Conectar</string>
-    <string name="action_disconnect">Desconectar</string>
-    <string name="action_run">Executar</string>
-    <string name="action_stop">Parar</string>
-    <string name="action_settings">Opções</string>
-    <string name="action_save">Salvar</string>
-    <string name="action_cancel">Cancelar</string>
-    <string name="action_update">Atualizar</string>
+    <string nome="action_create_account">Criar Conta</string>
+    <string nome="action_send_link">Enviar Link</string>
+    <string nome="action_verify_email">Verificar Email</string>
+    <string nome="action_sign_in_register">Entrar ou Registrar</string>
+    <string nome="action_sign_in">Entrar</string>
+    <string nome="action_sign_out">Sair</string>
+    <string nome="action_connect">Conectar</string>
+    <string nome="action_disconnect">Desconectar</string>
+    <string nome="action_run">Executar</string>
+    <string nome="action_stop">Parar</string>
+    <string nome="action_settings">Opções</string>
+    <string nome="action_save">Salvar</string>
+    <string nome="action_cancel">Cancelar</string>
+    <string nome="action_update">Atualizar</string>
 
-    <string name="status_signed_in">Conectado</string>
-    <string name="status_signed_out">Desconectado</string>
-    <string name="status_loading">Carregando…</string>
-    <string name="status_code_sent">Código Enviado!</string>
-    <string name="status_verification_succeeded">Verificação Bem Sucedida!</string>
-    <string name="status_permission_rationale">
+    <string nome="status_signed_in">Conectado</string>
+    <string nome="status_signed_out">Desconectado</string>
+    <string nome="status_loading">Carregando…</string>
+    <string nome="status_code_sent">Código Enviado!</string>
+    <string nome="status_verification_succeeded">Verificação Bem Sucedida!</string>
+    <string nome="status_permission_rationale">
         "As permissões de contatos são necessárias para fornecer conclusões de email."
     </string>
-    <string name="status_navigation_drawer_open">Open navigation drawer</string>
-    <string name="status_navigation_drawer_close">Close navigation drawer</string>
+    <string nome="status_navigation_drawer_open">Open navigation drawer</string>
+    <string nome="status_navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="error_invalid_email">Esse endereco de e-mail é inválido.</string>
-    <string name="error_invalid_password">Essa senha é muito curta.</string>
-    <string name="error_incorrect_email">Este e-mail não existe.</string>
-    <string name="error_incorrect_password">Esta senha está incorreta.</string>
-    <string name="error_field_required">Este campo é obrigatório.</string>
-    <string name="error_verification_failed">Falha na Verificação.</string>
-    <string name="error_sign_in_failed">Falha na Conexão.</string>
-    <string name="error_auth_failed">Falha na Autenticação.</string>
-    <string name="error_message_email">There is no user record corresponding to this identifier. The user may have been deleted.</string>
-    <string name="error_message_password">The password is invalid or the user does not have a password.</string>
+    <string nome="error_invalid_email">Esse endereco de e-mail é inválido.</string>
+    <string nome="error_invalid_password">Essa senha é muito curta.</string>
+    <string nome="error_incorrect_email">Este e-mail não existe.</string>
+    <string nome="error_incorrect_password">Esta senha está incorreta.</string>
+    <string nome="error_field_required">Este campo é obrigatório.</string>
+    <string nome="error_verification_failed">Falha na Verificação.</string>
+    <string nome="error_sign_in_failed">Falha na Conexão.</string>
+    <string nome="error_auth_failed">Falha na Autenticação.</string>
+    <string nome="error_message_email">There is no user record corresponding to this identifier. The user may have been deleted.</string>
+    <string nome="error_message_password">The password is invalid or the user does not have a password.</string>
 
     <!-- String for spinners -->
-    <string-array name="spinner_ar">
-        <item>Temperatura do Ar-Condicionado</item>
-        <item>Desligado</item>
-        <item>17ºC</item>
-        <item>18ºC</item>
-        <item>19ºC</item>
-        <item>20ºC</item>
-        <item>21ºC</item>
-        <item>22ºC</item>
-        <item>23ºC</item>
-        <item>24ºC</item>
-        <item>25ºC</item>
+    <string-array nome="spinner_marca">
+        <item>Lg</item>
+        <item>Samsung</item>
+        <item>Sony</item>
     </string-array>
 
-    <string-array name="spinner_datashow">
+    <string-array nome="spinner_modelo">
+        <item>teste 1</item>
+        <item>teste 2</item>
+        <item>teste 3</item>
+    </string-array>
+
+    <string-array nome="spinner_tipo">
+        <item>Ar-Condicionado</item>
         <item>Datashow</item>
-        <item>Desligado</item>
-        <item>Ligado</item>
+        <item>Tv</item>
     </string-array>
 
-    <string-array name="spinner_datashow_orientation">
-        <item>Orientação do datashow</item>
-        <item>virado pra cima</item>
-        <item>virado pra baixo</item>
-        <item>virado pra direita</item>
-        <item>virado pra esquerda</item>
-    </string-array>
-
-    <string-array name="spinner_datashow_resolution">
+    <string-array nome="spinner_datashow_resolution">
         <item>Resolução do Datashow</item>
         <item>720x576</item>
         <item>800x600</item>
@@ -118,7 +108,7 @@
         <item>1920x1080</item>
     </string-array>
 
-    <string-array name="spinner_computer">
+    <string-array nome="spinner_computer">
         <item>Computador </item>
         <item>Ligado</item>
         <item>Desligado</item>

@@ -45,7 +45,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import br.com.brainsflow.projetoctr.R;
-import br.com.brainsflow.projetoctr.entities.EDefinition;
+import br.com.brainsflow.projetoctr.entities.Definicao;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private ImageView imageView;
-    private TextView textViewName;
-    private TextView textViewEmail;
-    private FloatingActionButton buttonAdd;
+    private TextView txvName;
+    private TextView txvEmail;
+    private FloatingActionButton btnAdd;
     private ListView listView;
 
     // Atributos da classe.
@@ -99,10 +99,10 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.status_navigation_drawer_open, R.string.status_navigation_drawer_close);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         imageView = (ImageView) findViewById(R.id.imageView);
-        textViewName = (TextView) findViewById(R.id.textFieldNameUser);
-        textViewEmail = (TextView) findViewById(R.id.textFieldEmailUser);
-        listView = (ListView) findViewById(R.id.listViewDefinition);
-        buttonAdd = (FloatingActionButton) findViewById(R.id.buttonAdd);
+        txvName = (TextView) findViewById(R.id.txvName);
+        txvEmail = (TextView) findViewById(R.id.txvEmail);
+        listView = (ListView) findViewById(R.id.listView);
+        btnAdd = (FloatingActionButton) findViewById(R.id.btnAdd);
 
         // Referencia a instancia de autenticação do Firebase.
         auth = FirebaseAuth.getInstance();
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -195,8 +195,8 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Este método é chamado uma vez com o valor inicial e novamente
                 // sempre que os dados neste local forem atualizados.
-                EDefinition value = dataSnapshot.getValue(EDefinition.class);
-                Log.d(TAG, "Value is: " + "EDefinition");
+                Definicao value = dataSnapshot.getValue(Definicao.class);
+                Log.d(TAG, "Value is: " + "Definicao");
             }
 
             @Override
@@ -257,8 +257,8 @@ public class MainActivity extends AppCompatActivity
         imageView.setImageBitmap(bitmap);
 
         // Carregamos o nome e e-mail do usuário no TextField.
-        textViewName.setText(user.getDisplayName());
-        textViewEmail.setText(user.getEmail());
+        txvName.setText(user.getDisplayName());
+        txvEmail.setText(user.getEmail());
     }
 
     private Bitmap getImageBitmap(String url) {
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void monitorarBotãoFlutuante() {
-        String id =  "buttonAdd";
+        String id =  "btnAdd";
         String name = "adicionar definição";
 
         // [START FloatingActionButton_view_event]
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity
 
     private void makeArrayRequest() {
 //        if (true) {
-//            ArrayList<EDefinition> lista = new ArrayList<>();
+//            ArrayList<Definicao> lista = new ArrayList<>();
 //            StableArrayAdapter adapter = new StableArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1, lista);// Cria um object e seta os parametros no simpleAdapter
 //            listView.setAdapter(adapter);// sets o adapter na listView
 //        }

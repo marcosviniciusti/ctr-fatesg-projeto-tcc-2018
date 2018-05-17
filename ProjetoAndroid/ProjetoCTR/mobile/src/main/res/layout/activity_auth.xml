@@ -48,7 +48,7 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/textFieldEmail"
+                    android:id="@+id/txtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -56,7 +56,7 @@
                     android:inputType="textEmailAddress" />
 
                 <EditText
-                    android:id="@+id/textFieldPassword"
+                    android:id="@+id/txtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -73,14 +73,14 @@
                 android:paddingTop="20dp">
 
                 <Button
-                    android:id="@+id/buttonSignIn"
+                    android:id="@+id/btnSignIn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/action_sign_in" />
 
                 <Button
-                    android:id="@+id/buttonCreateAccount"
+                    android:id="@+id/btnCreateAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -95,7 +95,7 @@
                 android:paddingTop="20dp">
 
                 <com.google.android.gms.common.SignInButton
-                    android:id="@+id/buttonSignInGoogle"
+                    android:id="@+id/btnSignInGoogle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center" />

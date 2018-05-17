@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.brainsflow.projetoctr">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:nome="android.permission.INTERNET" />
     <uses-permission
-        android:name="android.permission.TRANSMIT_IR"
+        android:nome="android.permission.TRANSMIT_IR"
         android:required="false" />
 
-    <uses-feature android:name="android.hardware.consumerir" />
+    <uses-feature android:nome="android.hardware.consumerir" />
 
     <application
         android:allowBackup="true"
@@ -16,21 +16,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AuthActivity">
+        <activity android:nome=".activities.AuthActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="br.com.brainsflow.projetoctr.activities.AuthActivity" />
+                <action android:nome="android.intent.action.MAIN" />
+                <action android:nome="br.com.brainsflow.projetoctr.activities.AuthActivity" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:nome="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.BaseActivity" />
+        <activity android:nome=".activities.BaseActivity" />
         <activity
-            android:name=".activities.RemoteControlActivity"
+            android:nome=".activities.RemoteControlActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.RascunhoActivity" />
+        <activity android:nome=".activities.RascunhoActivity" />
         <activity
-            android:name=".activities.MainActivity"
+            android:nome=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
