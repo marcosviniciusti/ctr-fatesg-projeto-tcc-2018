@@ -4,14 +4,26 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="colorCtrBlack">#000000</color>
-    <color name="colorCtrBlue">#000F9F</color>
-    <color name="colorCtrGren">#00AA00</color>
-    <color name="colorCtrRed">#EE0000</color>
-    <color name="colorCtrWhite">#FFFFFF</color>
+    <color nome="colorCtrBlack">#000000</color>
+    <color nome="colorCtrBlue">#000F9F</color>
+    <color nome="colorCtrGren">#00AA00</color>
+    <color nome="colorCtrRed">#EE0000</color>
+    <color nome="colorCtrWhite">#FFFFFF</color>
 
+<<<<<<< HEAD:ProjetoAndroid/ProjetoTCC/mobile/src/main/res/values/colors.xml
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_500">#9E9E9E</color>
     <color name="browser_actions_title_color">#FF646464</color>
+=======
+    <color nome="colorPrimary">#3F51B5</color>
+    <color nome="colorPrimaryDark">#303F9F</color>
+    <color nome="colorAccent">#FF4081</color>
+
+    <color nome="grey_100">#F5F5F5</color>
+    <color nome="grey_300">#E0E0E0</color>
+    <color nome="grey_500">#9E9E9E</color>
+    <color nome="browser_actions_title_color">#FF646464</color>
+
+>>>>>>> 15df24ea2ca18f9dd57a2da169a893b3ed7dd566:ProjetoAndroid/ProjetoCTR/mobile/src/main/res/values/colors.xml
 </resources>

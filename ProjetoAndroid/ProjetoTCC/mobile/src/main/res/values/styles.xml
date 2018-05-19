@@ -1,11 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style nome="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item nome="colorPrimary">@color/colorPrimary</item>
+        <item nome="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item nome="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -18,21 +18,22 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- Activity with no Title -->
-    <style name="ThemeOverlay.MyNoTitleActivity" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style nome="ThemeOverlay.MyNoTitleActivity" parent="AppTheme">
+        <item nome="windowActionBar">false</item>
+        <item nome="windowNoTitle">true</item>
     </style>
 
     <!-- Dark Buttons -->
-    <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="colorButtonNormal">@color/grey_500</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:layout_marginRight">4dp</item>
-        <item name="android:layout_marginLeft">4dp</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style nome="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item nome="colorButtonNormal">@color/grey_500</item>
+        <item nome="colorAccent">@color/colorAccent</item>
+        <item nome="android:layout_marginRight">4dp</item>
+        <item nome="android:layout_marginLeft">4dp</item>
+        <item nome="android:textColor">@android:color/white</item>
     </style>
 
     <!-- Light EditTexts -->
+<<<<<<< HEAD:ProjetoAndroid/ProjetoTCC/mobile/src/main/res/values/styles.xml
     <style name="ThemeOverlay.MyLightEditText" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="ThemeOverlay.MyTextDetail" parent="AppTheme">
@@ -44,16 +45,38 @@
         <item name="android:padding">4dp</item>
         <item name="android:scrollbars">vertical</item>
         <item name="android:textSize">14sp</item>
+=======
+    <style nome="ThemeOverlay.MyLightEditText" parent="ThemeOverlay.AppCompat.Dark" />
+
+    <style nome="ThemeOverlay.MyTextDetail" parent="AppTheme">
+        <item nome="android:layout_width">wrap_content</item>
+        <item nome="android:layout_height">wrap_content</item>
+        <item nome="android:fadeScrollbars">true</item>
+        <item nome="android:gravity">center</item>
+        <item nome="android:maxLines">5</item>
+        <item nome="android:padding">4dp</item>
+        <item nome="android:scrollbars">vertical</item>
+        <item nome="android:textSize">14sp</item>
+>>>>>>> 15df24ea2ca18f9dd57a2da169a893b3ed7dd566:ProjetoAndroid/ProjetoCTR/mobile/src/main/res/values/styles.xml
     </style>
 
-    <style name="ThemeOverlay.FirebaseIcon" parent="AppTheme">
-        <item name="android:layout_marginTop">@dimen/icon_top_margin</item>
-        <item name="android:layout_marginBottom">@dimen/icon_bottom_margin</item>
+    <style nome="ThemeOverlay.FirebaseIcon" parent="AppTheme">
+        <item nome="android:layout_marginTop">@dimen/icon_top_margin</item>
+        <item nome="android:layout_marginBottom">@dimen/icon_bottom_margin</item>
     </style>
 
-    <style name="ThemeOverlay.MyTitleText" parent="AppTheme">
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">36sp</item>
+    <style nome="ThemeOverlay.MyTitleText" parent="AppTheme">
+        <item nome="android:gravity">center</item>
+        <item nome="android:textSize">36sp</item>
     </style>
+
+    <style nome="AppTheme.NoActionBar">
+        <item nome="windowActionBar">false</item>
+        <item nome="windowNoTitle">true</item>
+    </style>
+
+    <style nome="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style nome="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

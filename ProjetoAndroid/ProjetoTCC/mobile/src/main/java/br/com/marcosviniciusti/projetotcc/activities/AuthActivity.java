@@ -28,8 +28,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+<<<<<<< HEAD:ProjetoAndroid/ProjetoTCC/mobile/src/main/java/br/com/marcosviniciusti/projetotcc/activities/AuthActivity.java
 import br.com.marcosviniciusti.projetotcc.R;
 import br.com.marcosviniciusti.projetotcc.business.BLogin;
+=======
+import br.com.brainsflow.projetoctr.R;
+import br.com.brainsflow.projetoctr.business.BLogin;
+>>>>>>> 15df24ea2ca18f9dd57a2da169a893b3ed7dd566:ProjetoAndroid/ProjetoCTR/mobile/src/main/java/br/com/brainsflow/projetoctr/activities/AuthActivity.java
 
 ;
 
@@ -255,7 +260,11 @@ public class AuthActivity extends BaseActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+<<<<<<< HEAD:ProjetoAndroid/ProjetoTCC/mobile/src/main/java/br/com/marcosviniciusti/projetotcc/activities/AuthActivity.java
                             Snackbar.make(findViewById(R.id.drawer_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+=======
+                            Snackbar.make(findViewById(R.id.activity_rascunho), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+>>>>>>> 15df24ea2ca18f9dd57a2da169a893b3ed7dd566:ProjetoAndroid/ProjetoCTR/mobile/src/main/java/br/com/brainsflow/projetoctr/activities/AuthActivity.java
                             checkAuth(false);
                         }
 
