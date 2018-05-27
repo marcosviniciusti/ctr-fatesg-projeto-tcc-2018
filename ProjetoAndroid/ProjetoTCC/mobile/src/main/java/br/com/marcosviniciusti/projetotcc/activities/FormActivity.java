@@ -35,6 +35,7 @@ public class FormActivity extends AppCompatActivity {
     private Button btnCancelar;
 
     //  Atributos da classe.
+    private Definicao definicao;
     private Equipamento equipamento;
     private ArrayList<Definicao> lista;
 
@@ -50,7 +51,6 @@ public class FormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
         bindView();
-        loadSpinner();
         createEvents();
     }
 
@@ -64,15 +64,11 @@ public class FormActivity extends AppCompatActivity {
         btnSalvar = (Button) findViewById(R.id.btnSave);
         btnCancelar = (Button) findViewById(R.id.btnCancel);
 
-        equipamento = new Equipamento();
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("bundle");
-        lista = (ArrayList<Definicao>) bundle.getSerializable("lista");
-
         // Referencia a instancia de autenticação do Firebase.
         auth = FirebaseAuth.getInstance();
         // Configura o Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -86,23 +82,60 @@ public class FormActivity extends AppCompatActivity {
         defRef = ctrRef.child("definition");
         remoteRef = ctrRef.child("remote");
         groupRef = ctrRef.child("group");
+
+        equipamento = new Equipamento();
+        lista = (ArrayList<Definicao>) getIntent()
+                .getBundleExtra("bundle").getSerializable("lista");
+        loadSpinner();
     }
 
     public void loadSpinner() {
         // Aqui fazemos uma referencia aos arrays de dados que inserimos no arquivo "string.xml"
-        ArrayAdapter<CharSequence> adapter_marca = ArrayAdapter.createFromResource(this, R.array.spinner_marca, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> adapter_modelo = ArrayAdapter.createFromResource(this, R.array.spinner_modelo, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> adapter_tipo = ArrayAdapter.createFromResource(this, R.array.spinner_tipo, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_marca = ArrayAdapter.createFromResource
+                (this, R.array.spinner_marca, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_modelo = ArrayAdapter.createFromResource
+                (this, R.array.spinner_modelo, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter_tipo = ArrayAdapter.createFromResource
+                (this, R.array.spinner_tipo, android.R.layout.simple_spinner_item);
 
-        // Aqui declaramos ao ArrayAdapter, qual o tipo de spinner iremos trabalhar, que no caso aqui é o "DropDownView".
+        // Aqui declaramos ao ArrayAdapter, qual o tipo de spinner iremos trabalhar,
+        // que no caso aqui é o "DropDownView".
         adapter_marca.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter_modelo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter_tipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // Aqui inserimos os dados que criamos no arquivo "sting.xml" que serão persistentes no spinner graças ao "ArrayAdapter".
+        // Aqui inserimos os dados que criamos no arquivo "sting.xml" que serão persistentes no
+        // spinner graças ao "ArrayAdapter".
         spMarca.setAdapter(adapter_marca);
         spModelo.setAdapter(adapter_modelo);
         spTipo.setAdapter(adapter_tipo);
+
+        if (!lista.isEmpty()) {
+            definicao = lista.get(0);
+            if (definicao != null) {
+                if (definicao.getNome() != null || !definicao.getNome().isEmpty()) {
+                    txtNome.setText(definicao.getNome());
+                }
+                if (definicao.getEquipamentos() != null || !definicao.getEquipamentos().isEmpty()) {
+                    equipamento = definicao.getEquipamentos().get(0);
+                    for (int i=0; i<adapter_marca.getCount(); i++) {
+                        if (equipamento.getMarca().equals(adapter_marca.getItem(i).toString())){
+                            spMarca.setPromptId(i);
+                        }
+                    }
+                    for (int i=0; i<adapter_modelo.getCount(); i++) {
+                        if (equipamento.getModelo().equals(adapter_modelo.getItem(i).toString())) {
+                            spModelo.setPromptId(i);
+                        }
+                    }
+                    for (int i=0; i<adapter_tipo.getCount(); i++) {
+                        if (equipamento.getTipoEquipamento().equals(adapter_tipo.getItem(i).toString())) {
+                            spTipo.setPromptId(i);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void createEvents() {
@@ -171,7 +204,7 @@ public class FormActivity extends AppCompatActivity {
         List<Equipamento> listaEquipamentos = new ArrayList<Equipamento>();
         listaEquipamentos.add(equipamento);
 
-        Definicao definicao = new Definicao();
+        definicao = new Definicao();
         definicao.setNome(nome);
         definicao.setEquipamentos(listaEquipamentos);
 

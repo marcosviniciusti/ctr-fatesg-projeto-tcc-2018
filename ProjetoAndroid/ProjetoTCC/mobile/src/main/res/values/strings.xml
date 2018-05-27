@@ -47,6 +47,7 @@
     <string name="action_save">Salvar</string>
     <string name="action_cancel">Cancelar</string>
     <string name="action_update">Atualizar</string>
+    <string name="action_control">Controle Remoto</string>
 
     <string name="status_signed_in">Conectado</string>
     <string name="status_signed_out">Desconectado</string>
@@ -69,6 +70,7 @@
     <string name="error_auth_failed">Falha na Autenticação.</string>
     <string name="error_message_email">There is no user record corresponding to this identifier. The user may have been deleted.</string>
     <string name="error_message_password">The password is invalid or the user does not have a password.</string>
+
 
     <!-- String for spinners -->
     <string-array name="spinner_marca">

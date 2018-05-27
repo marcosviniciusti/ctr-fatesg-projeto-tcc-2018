@@ -3,6 +3,7 @@ package br.com.marcosviniciusti.projetotcc.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,38 +48,36 @@ public class AuthActivity extends BaseActivity {
     private Button btnSignInButton;
     private SignInButton btnSignInGoogle;
 
+    // Atributos da biblioteca do firebase.
+    private FirebaseAuth auth;
+    private GoogleSignInClient googleSignInClient;
+
     // Atributos da classe.
     private static final String TAG = "AuthActivity";
     private static final int RC_SIGN_IN = 9001;
     private BLogin bLogin;
-
-    // Atributos da biblioteca do firebase.
-    private FirebaseAuth auth;
-    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth); // Referencia a tela XML.
         bind(); // Inicializa os atributos e referencias.
-        creatEvent(); // Cria eventos.
+        creatEvent(); // Cria eventos para os componentes da tela.
     }
 
     // Inicializa os atributos.
     public void bind() {
         // Instacia atributo da biblioteca do Firebase.
         auth = FirebaseAuth.getInstance();
-        // Configura o login pelo Google
-        // [START]
+        // Configura o login pelo Google.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-        //  [END]
-        bLogin = new BLogin(); // Inicializa variável de negócios do login.
+        // Inicializa objeto de negócios do login.
+        bLogin = new BLogin();
         // Inicializa os componentes da interface.
-        //  [START]
         containerScrollView = findViewById(R.id.containerScrollView);
         widgetProgressBar = findViewById(R.id.widgetProgressBar);
         txtEmail = (EditText) findViewById(R.id.txtEmail);
@@ -86,7 +85,6 @@ public class AuthActivity extends BaseActivity {
         btnCreateButton = (Button) findViewById(R.id.btnCreateAccount);
         btnSignInButton = (Button) findViewById(R.id.btnSignIn);
         btnSignInGoogle = (SignInButton) findViewById(R.id.btnSignInGoogle);
-        //  [END]
     }
 
     // Cria eventos;
@@ -106,7 +104,6 @@ public class AuthActivity extends BaseActivity {
             }
         });
 
-        // Cria o evento de ação de clicar no botão
         btnSignInGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,8 +125,7 @@ public class AuthActivity extends BaseActivity {
         hideProgressDialog(); // Oculta pop-ups de carregamento.
         if (user) {
             showProgress(true); // Apresenta pop-ups de carregamento.
-            startActivity(createIntent()); // Inicializa outra janela.
-//            findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
+            startActivity(createIntent(this, MainActivity.class)); // Inicializa outra janela.
         } else {
             showProgress(false); // Oculta pop-ups de carregamento.
             txtEmail.setText(null);
@@ -138,10 +134,8 @@ public class AuthActivity extends BaseActivity {
     }
 
     // Cria uma intenção para enviar para outra janela.
-    private Intent createIntent() {
-//        Intent intent = new Intent(AuthActivity.this, RascunhoActivity.class);
-//        Intent intent = new Intent(AuthActivity.this, MainScreenActivity.class);
-        Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+    private Intent createIntent(Context context, Class aClass) {
+        Intent intent = new Intent(context, aClass);
         return intent;
     }
 
@@ -162,7 +156,6 @@ public class AuthActivity extends BaseActivity {
             return;
         } else {
             showProgressDialog();
-
             auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -173,8 +166,8 @@ public class AuthActivity extends BaseActivity {
                                 checkAuth(bLogin.hasAuth(auth));
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(AuthActivity.this, "Authentication failed.",
+                                Log.w(TAG, "createUserWithEmail:failure - "+task.getException().getMessage(), task.getException());
+                                Toast.makeText(AuthActivity.this, "Erro na Authenticação.",
                                         Toast.LENGTH_SHORT).show();
                                 checkAuth(false);
                             }

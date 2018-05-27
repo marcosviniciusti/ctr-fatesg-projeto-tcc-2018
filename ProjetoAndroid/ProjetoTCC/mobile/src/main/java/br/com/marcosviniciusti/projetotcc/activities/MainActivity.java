@@ -1,15 +1,14 @@
 package br.com.marcosviniciusti.projetotcc.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,9 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +46,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import br.com.marcosviniciusti.projetotcc.R;
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity
     private ImageView imageView;
     private TextView txvName;
     private TextView txvEmail;
+    private MenuItem btnConnect;
+    private MenuItem btnDisconnect;
     private FloatingActionButton btnAdd;
     private ListView listView;
 
@@ -74,14 +76,14 @@ public class MainActivity extends AppCompatActivity
     private final String URL_DELETE = "/home/marcos/";
     private final String URL_REQUEST = "/home/marcos/";
     private List<Definicao> lista;
+    private List<HashMap<String, String>> listaHashMap;
 
     // Atributos da biblioteca do Firebase.
-    private FirebaseAuth auth;
-    private GoogleSignInClient googleSignInClient;
-    private FirebaseAnalytics firebaseAnalytics;
-    // Referenciando o banco de dados do Firebase.
-    FirebaseDatabase database;
-    DatabaseReference listDefRef, defRef;
+    private FirebaseAuth auth; // Declaração do sistema de autenticação.
+    private GoogleSignInClient googleSignInClient; // Declaração da autenticação do Google.
+    private FirebaseAnalytics firebaseAnalytics; // Declaração do analytics.
+    FirebaseDatabase database; // Declaração do banco de dados.
+    DatabaseReference listDefRef, defRef; // Declaração de referencias do banco de dados.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +94,10 @@ public class MainActivity extends AppCompatActivity
 
         //  Função que instancia os atributos da interface e atributos da classe.
         bindView();
-        //  Função que cria eventos dos componentes
+        //  Função que cria eventos dos componentes.
         createEvents();
         // Função que carrega dados e insere nos componentes.
         loadComponentsNav();
-        // Função que carrega dados do banco de dados para a listview.
-        loadDatabase();
     }
 
     private void bindView() {
@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity
         imageView = (ImageView) headerNav.findViewById(R.id.imageView);
         txvName = (TextView) headerNav.findViewById(R.id.txvName);
         txvEmail = (TextView) headerNav.findViewById(R.id.txvEmail);
+        btnConnect = toolbar.getMenu().findItem(R.id.btnConnect);
+        btnDisconnect = toolbar.getMenu().findItem(R.id.btnDisconnect);
         listView = (ListView) findViewById(R.id.listView);
         btnAdd = (FloatingActionButton) findViewById(R.id.btnAdd);
-
-        lista = new ArrayList<Definicao>();
 
         // Referencia a instancia de autenticação do Firebase.
         auth = FirebaseAuth.getInstance();
@@ -128,10 +128,12 @@ public class MainActivity extends AppCompatActivity
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Referencia a instância do banco de dados do Firebase.
         database = FirebaseDatabase.getInstance();
-
         // Referencia nós do banco de dados.
         listDefRef = database.getReference().child("listaDefinicao");
         defRef = listDefRef.child("definicao2");
+
+        lista = new ArrayList<Definicao>();
+        listaHashMap = new ArrayList<HashMap<String, String>>();
     }
 
     private void createEvents() {
@@ -143,19 +145,15 @@ public class MainActivity extends AppCompatActivity
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                monitorarBotãoFlutuante();
-
+                monitorarBotaoFlutuante();
                 // Criamos a intent pois é através desse objeto que trafegamos dados de uma tela para outra.
                 Intent intent = new Intent(view.getContext(), FormActivity.class);
-
+                // Criamos um pacote para enviar objetos dessa classe para outra.
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("lista", (Serializable) lista);
                 intent.putExtra("bundle", bundle);
-
                 // Enviamos o intent para a outra tela.
                 view.getContext().startActivity(intent);
-                //makeArrayRequest();
             }
         });
 
@@ -184,8 +182,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
     }
 
     private void loadComponentsNav() {
@@ -194,74 +190,17 @@ public class MainActivity extends AppCompatActivity
 
         if (user != null) {
             if (user.getEmail() != null || !user.getEmail().isEmpty()) {
-                // Carregamos a imagem no elemento ImageView.
-                // Aqui pegamos a referencia da imagem em string e a transformamos em uma referencia para int
-                int imageResource = R.drawable.firebase_lockup_400;
-                // Aqui pega a imagem e trás para tela referenciada
-                Drawable res = ContextCompat.getDrawable(getApplicationContext(), imageResource);
-
-                // Carregamos a imagem no elemento.
-                Log.w(TAG, "URL: " + user.getPhotoUrl());
+                Log.d(TAG, "URL: " + user.getPhotoUrl());
+                // Fazemos o download da imagem na rede.
                 Bitmap bitmap = getImageBitmap(user.getPhotoUrl().toString());
+                // Carregamos a imagem no elemento ImageView.
                 imageView.setImageBitmap(bitmap);
 
-                // Carregamos o nome e e-mail do usuário no TextField.
+                // Carregamos o nome e e-mail do usuário nos TextField's.
                 txvName.setText(user.getDisplayName());
                 txvEmail.setText(user.getEmail());
             }
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        loadDatabase();
-    }
-
-    private void loadDatabase() {
-
-        // Ler o banco de dados
-        listDefRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Este método é chamado uma vez com o valor inicial e novamente
-                // sempre que os dados neste local forem atualizados.
-//                List<Definicao> value = dataSnapshot.getValue(Definicao.class);
-//                loadListView(value);
-                Log.d(TAG, "Value is: " + "Definicao");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-
-        // Ler o banco de dados
-        defRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Este método é chamado uma vez com o valor inicial e novamente
-                // sempre que os dados neste local forem atualizados.
-                Definicao value = dataSnapshot.getValue(Definicao.class);
-                loadListView(value);
-                Log.d(TAG, "Value is: " + "Definicao");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    private void loadListView(Definicao definicao) {
-        lista.add(definicao);
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.content_listview, lista);
-        listView.setAdapter(adapter);
     }
 
     private Bitmap getImageBitmap(String url) {
@@ -281,30 +220,93 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             Log.e(TAG, "Error getting bitmap: "+e.getMessage(), e);
         } catch (Exception erro) {
-            Log.e(TAG, "Error: "+erro.getMessage(), erro);
+            Log.e(TAG, "Error: "+erro.getMessage(), erro.getCause());
         }
         return bm;
     }
 
-    private void monitorarBotãoFlutuante() {
-        String id =  "btnAdd";
-        String name = "adicionar definição";
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (btnConnect.isEnabled()) {
+            btnDisconnect.setEnabled(false);
+        } else {
+            btnDisconnect.setEnabled(true);
+        }
 
-        // [START FloatingActionButton_view_event]
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button");
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-        // [END FloatingActionButton_view_event]
+        // Função que carrega dados do banco de dados para a listview.
+        loadDatabase();
     }
 
-    private void makeArrayRequest() {
-//        if (true) {
-//            ArrayList<Definicao> lista = new ArrayList<>();
-//            StableArrayAdapter adapter = new StableArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1, lista);// Cria um object e seta os parametros no simpleAdapter
-//            listView.setAdapter(adapter);// sets o adapter na listView
-//        }
+    private void loadDatabase() {
+
+        // Ler o banco de dados.
+        listDefRef.addValueEventListener(new ValueEventListener() {
+            // Este método é chamado uma vez com o valor inicial e novamente
+            // sempre que os dados neste local forem atualizados.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                List<Definicao> value = dataSnapshot.getValue(Definicao.class);
+//                loadListView(value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e(TAG, "Failed to read value of listDefRef: "+error.getMessage(), error.toException());
+            }
+        });
+
+        // Ler o banco de dados
+        defRef.addValueEventListener(new ValueEventListener() {
+            // Este método é chamado uma vez com o valor inicial e novamente
+            // sempre que os dados neste local forem atualizados.
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Definicao value = dataSnapshot.getValue(Definicao.class);
+                Log.d(TAG, "Definição nome: "+value.getNome());
+                loadListView(value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.e(TAG, "Failed to read value of defRef: "+error.getMessage(), error.toException());
+            }
+        });
+    }
+
+    private void loadListView(Definicao definicao) {
+        try {
+            lista.add(definicao);
+            Log.d(TAG, "Definição: "+definicao.getNome());
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("nome", definicao.getNome());
+            listaHashMap.add(hashMap);
+            String[] from= {"nome"};
+            int[] to = {R.id.txName};
+            SimpleAdapter adapter = new SimpleAdapter(this, listaHashMap, R.layout.content_listview, from, to);
+            listView.setAdapter(adapter);
+        } catch (Exception e) {
+            Log.e(TAG, "ERRO no loadListView: "+e.getMessage(), e.getCause());
+        }
+    }
+
+    private void monitorarBotaoFlutuante() {
+        try {
+            String id =  "btnAdd";
+            String name = "adicionar definição";
+
+            // [START FloatingActionButton_view_event]
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "button");
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            // [END FloatingActionButton_view_event]
+        } catch (Exception e) {
+            Log.e(TAG, "ERRO no monitorarBotaoFlutuante: "+ e.getMessage(), e.getCause());
+        }
     }
 
     @Override
@@ -340,8 +342,21 @@ public class MainActivity extends AppCompatActivity
             // Método de desconectar do arduino
             return true;
         }
+        if (id == R.id.btnControlRemote) {
+            startActivity(createIntent(this, RemoteControlActivity.class, null));
+
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private Intent createIntent(Context context, Class aClass, Object object) {
+        Intent intent = new Intent(context, aClass);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("objeto", (Serializable) object);
+        intent.putExtra("bundle", bundle);
+        return intent;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
