@@ -30,12 +30,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.marcosviniciusti.projetotcc.R;
-import br.com.marcosviniciusti.projetotcc.business.BLogin;
+import br.com.marcosviniciusti.projetotcc.business.BAuth;
 
 ;
 
 /**
- * Uma tela de bLogin que oferece bLogin via email / senha.
+ * Uma tela de bAuth que oferece bAuth via email / senha.
  */
 public class AuthActivity extends BaseActivity {
 
@@ -55,18 +55,19 @@ public class AuthActivity extends BaseActivity {
     // Atributos da classe.
     private static final String TAG = "AuthActivity";
     private static final int RC_SIGN_IN = 9001;
-    private BLogin bLogin;
+    private BAuth bAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth); // Referencia a tela XML.
         bind(); // Inicializa os atributos e referencias.
         creatEvent(); // Cria eventos para os componentes da tela.
     }
 
     // Inicializa os atributos.
     public void bind() {
+        // Referencia a tela XML.
+        setContentView(R.layout.activity_auth);
         // Instacia atributo da biblioteca do Firebase.
         auth = FirebaseAuth.getInstance();
         // Configura o login pelo Google.
@@ -76,7 +77,7 @@ public class AuthActivity extends BaseActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
         // Inicializa objeto de negócios do login.
-        bLogin = new BLogin();
+        bAuth = new BAuth();
         // Inicializa os componentes da interface.
         containerScrollView = findViewById(R.id.containerScrollView);
         widgetProgressBar = findViewById(R.id.widgetProgressBar);
@@ -93,21 +94,21 @@ public class AuthActivity extends BaseActivity {
         btnCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createCount(); // tenta conectar no sistema.
+                btnCreateCount(); // tenta conectar no sistema.
             }
         });
 
         btnSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn(view); // tenta conectar no sistema.
+                btnSignIn(view); // tenta conectar no sistema.
             }
         });
 
         btnSignInGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn(view); // tenta conectar no sistema.
+                btnSignIn(view); // tenta conectar no sistema.
             }
         });
     }
@@ -116,12 +117,12 @@ public class AuthActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         // Imprime no log o resultado da existencia de uma autentificação.
-        Log.d(TAG, "METHOD: hasAuth(): "+bLogin.hasAuth(auth));
-        checkAuth(bLogin.hasAuth(auth));
+        Log.d(TAG, "METHOD: hasAuth(): "+ bAuth.hasAuth(auth));
+        openScreenMain(bAuth.hasAuth(auth));
     }
 
     // Verifica se existe alguma autentificação e atualiza a interface de acordo.
-    private void checkAuth(boolean user) {
+    private void openScreenMain(boolean user) {
         hideProgressDialog(); // Oculta pop-ups de carregamento.
         if (user) {
             showProgress(true); // Apresenta pop-ups de carregamento.
@@ -140,12 +141,12 @@ public class AuthActivity extends BaseActivity {
     }
 
     // Cria uma conta de usuário do aplicativo.
-    private void createCount() {
+    private void btnCreateCount() {
         String email = txtEmail.getText().toString();
         String password = txtPassword.getText().toString();
-        Log.d(TAG, "METHOD: createCount - email: "+email+" password: "+password);
+        Log.d(TAG, "METHOD: btnCreateCount - email: "+email+" password: "+password);
 
-        String[] result = bLogin.isFormValid(email, password, this);
+        String[] result = bAuth.isFormValid(email, password, this);
         if (!result[0].isEmpty()) {
             txtEmail.setError(result[0]);
             txtEmail.requestFocus();
@@ -163,13 +164,13 @@ public class AuthActivity extends BaseActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "createUserWithEmail:success");
-                                checkAuth(bLogin.hasAuth(auth));
+                                openScreenMain(bAuth.hasAuth(auth));
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure - "+task.getException().getMessage(), task.getException());
                                 Toast.makeText(AuthActivity.this, "Erro na Authenticação.",
                                         Toast.LENGTH_SHORT).show();
-                                checkAuth(false);
+                                openScreenMain(false);
                             }
 
                             // [START_EXCLUDE]
@@ -180,32 +181,6 @@ public class AuthActivity extends BaseActivity {
         }
     }
 
-    // Envia E-mail de verificação.
-    private void sendEmailVerification() {
-
-        final FirebaseUser user = auth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AuthActivity.this,
-                                    "Verificação de e-mail enviado para: "+user.getEmail(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e(TAG, "sendEmailVerification: Falha - "+task.getException()
-                                    .getMessage(), task.getException());
-                            Toast.makeText(AuthActivity.this,
-                                    "Falha no envio da verificação de e-mail.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-
-    // [START onactivityresult]
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -221,14 +196,12 @@ public class AuthActivity extends BaseActivity {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 // [START_EXCLUDE]
-                checkAuth(false);
+                openScreenMain(false);
                 // [END_EXCLUDE]
             }
         }
     }
-    // [END onactivityresult]
 
-    // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
@@ -244,12 +217,12 @@ public class AuthActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = auth.getCurrentUser();
-                            checkAuth(bLogin.hasAuth(auth));
+                            openScreenMain(bAuth.hasAuth(auth));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Snackbar.make(findViewById(R.id.drawer_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            checkAuth(false);
+                            openScreenMain(false);
                         }
 
                         // [START_EXCLUDE]
@@ -258,10 +231,9 @@ public class AuthActivity extends BaseActivity {
                     }
                 });
     }
-    // [END auth_with_google]
 
     // Entra na do usuário inserido no formulário.
-    private void signIn(View view) {
+    private void btnSignIn(View view) {
         int i = view.getId();
         if (i == R.id.btnSignInGoogle) {
             Intent signInIntent = googleSignInClient.getSignInIntent();
@@ -269,9 +241,9 @@ public class AuthActivity extends BaseActivity {
         } else {
             String email = txtEmail.getText().toString();
             String password = txtPassword.getText().toString();
-            Log.d(TAG, "signIn:" + email);
+            Log.d(TAG, "btnSignIn:" + email);
 
-            String[] result = bLogin.isFormValid(email, password, this);
+            String[] result = bAuth.isFormValid(email, password, this);
             if (!result[0].isEmpty()){
                 txtEmail.setError(result[0]);
                 txtEmail.requestFocus();
@@ -292,7 +264,7 @@ public class AuthActivity extends BaseActivity {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail:success");
-                                    checkAuth(bLogin.hasAuth(auth));
+                                    openScreenMain(bAuth.hasAuth(auth));
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure: " + task.getException().getMessage(), task.getException());
@@ -306,7 +278,7 @@ public class AuthActivity extends BaseActivity {
                                         Toast.makeText(AuthActivity.this, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
                                     }
-                                    checkAuth(false);
+                                    openScreenMain(false);
                                 }
 
                                 // [START_EXCLUDE]
@@ -329,7 +301,7 @@ public class AuthActivity extends BaseActivity {
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        checkAuth(false);
+                        openScreenMain(false);
                     }
                 });
     }
@@ -343,7 +315,7 @@ public class AuthActivity extends BaseActivity {
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        checkAuth(false);
+                        openScreenMain(false);
                     }
                 });
     }

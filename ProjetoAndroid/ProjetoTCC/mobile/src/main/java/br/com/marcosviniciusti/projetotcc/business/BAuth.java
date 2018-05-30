@@ -9,7 +9,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import br.com.marcosviniciusti.projetotcc.R;
 
-public class BLogin extends AppCompatActivity {
+public class BAuth extends AppCompatActivity {
+
+    private String TAG = "BAuth";
 
     public boolean hasAuth(FirebaseAuth mAuth) {
         FirebaseUser user = mAuth.getCurrentUser();

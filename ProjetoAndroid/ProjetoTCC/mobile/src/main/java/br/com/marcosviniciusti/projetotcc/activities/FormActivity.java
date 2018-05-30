@@ -1,6 +1,5 @@
 package br.com.marcosviniciusti.projetotcc.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.marcosviniciusti.projetotcc.R;
-import br.com.marcosviniciusti.projetotcc.entities.Definicao;
-import br.com.marcosviniciusti.projetotcc.entities.Equipamento;
+import br.com.marcosviniciusti.projetotcc.entities.EquipmentGroup;
+import br.com.marcosviniciusti.projetotcc.entities.Equipment;
 
 public class FormActivity extends AppCompatActivity {
 
@@ -35,9 +34,9 @@ public class FormActivity extends AppCompatActivity {
     private Button btnCancelar;
 
     //  Atributos da classe.
-    private Definicao definicao;
-    private Equipamento equipamento;
-    private ArrayList<Definicao> lista;
+    private EquipmentGroup equipmentGroup;
+    private Equipment equipment;
+    private ArrayList<EquipmentGroup> lista;
 
     // Atributos da biblioteca do Firebase.
     private FirebaseAuth auth;
@@ -83,8 +82,8 @@ public class FormActivity extends AppCompatActivity {
         remoteRef = ctrRef.child("remote");
         groupRef = ctrRef.child("group");
 
-        equipamento = new Equipamento();
-        lista = (ArrayList<Definicao>) getIntent()
+        equipment = new Equipment();
+        lista = (ArrayList<EquipmentGroup>) getIntent()
                 .getBundleExtra("bundle").getSerializable("lista");
         loadSpinner();
     }
@@ -111,25 +110,25 @@ public class FormActivity extends AppCompatActivity {
         spTipo.setAdapter(adapter_tipo);
 
         if (!lista.isEmpty()) {
-            definicao = lista.get(0);
-            if (definicao != null) {
-                if (definicao.getNome() != null || !definicao.getNome().isEmpty()) {
-                    txtNome.setText(definicao.getNome());
+            equipmentGroup = lista.get(0);
+            if (equipmentGroup != null) {
+                if (equipmentGroup.getNome() != null || !equipmentGroup.getNome().isEmpty()) {
+                    txtNome.setText(equipmentGroup.getNome());
                 }
-                if (definicao.getEquipamentos() != null || !definicao.getEquipamentos().isEmpty()) {
-                    equipamento = definicao.getEquipamentos().get(0);
+                if (equipmentGroup.getEquipment() != null || !equipmentGroup.getEquipment().isEmpty()) {
+                    equipment = equipmentGroup.getEquipment().get(0);
                     for (int i=0; i<adapter_marca.getCount(); i++) {
-                        if (equipamento.getMarca().equals(adapter_marca.getItem(i).toString())){
+                        if (equipment.getMarca().equals(adapter_marca.getItem(i).toString())){
                             spMarca.setPromptId(i);
                         }
                     }
                     for (int i=0; i<adapter_modelo.getCount(); i++) {
-                        if (equipamento.getModelo().equals(adapter_modelo.getItem(i).toString())) {
+                        if (equipment.getModelo().equals(adapter_modelo.getItem(i).toString())) {
                             spModelo.setPromptId(i);
                         }
                     }
                     for (int i=0; i<adapter_tipo.getCount(); i++) {
-                        if (equipamento.getTipoEquipamento().equals(adapter_tipo.getItem(i).toString())) {
+                        if (equipment.getTipoEquipamento().equals(adapter_tipo.getItem(i).toString())) {
                             spTipo.setPromptId(i);
                         }
                     }
@@ -198,16 +197,16 @@ public class FormActivity extends AppCompatActivity {
         String modelo = spModelo.getSelectedItem().toString();
         String tipo = spTipo.getSelectedItem().toString();
 
-        equipamento.setMarca(marca);
-        equipamento.setModelo(modelo);
-        equipamento.setTipoEquipamento(tipo);
-        List<Equipamento> listaEquipamentos = new ArrayList<Equipamento>();
-        listaEquipamentos.add(equipamento);
+        equipment.setMarca(marca);
+        equipment.setModelo(modelo);
+        equipment.setTipoEquipamento(tipo);
+        List<Equipment> listaEquipments = new ArrayList<Equipment>();
+        listaEquipments.add(equipment);
 
-        definicao = new Definicao();
-        definicao.setNome(nome);
-        definicao.setEquipamentos(listaEquipamentos);
+        equipmentGroup = new EquipmentGroup();
+        equipmentGroup.setNome(nome);
+        equipmentGroup.setEquipment(listaEquipments);
 
-        lista.add(definicao);
+        lista.add(equipmentGroup);
     }
 }

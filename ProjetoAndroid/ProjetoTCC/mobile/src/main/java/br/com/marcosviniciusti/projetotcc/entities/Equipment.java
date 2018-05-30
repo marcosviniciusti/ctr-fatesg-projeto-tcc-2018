@@ -1,6 +1,6 @@
 package br.com.marcosviniciusti.projetotcc.entities;
 
-public class Equipamento {
+public class Equipment {
 
     private String marca;
     private String modelo;

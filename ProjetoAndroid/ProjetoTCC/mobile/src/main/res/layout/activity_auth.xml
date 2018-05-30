@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/desc_icon_app"
-                android:src="@drawable/firebase_lockup_400" />
+                android:src="@drawable/img_logo" />
 
             <LinearLayout
                 android:id="@+id/layoutFieldsForm"

@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.com.marcosviniciusti.projetotcc.R;
-import br.com.marcosviniciusti.projetotcc.entities.Definicao;
+import br.com.marcosviniciusti.projetotcc.entities.EquipmentGroup;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,22 +75,19 @@ public class MainActivity extends AppCompatActivity
     private final String URL_PUT = "/home/marcos/";
     private final String URL_DELETE = "/home/marcos/";
     private final String URL_REQUEST = "/home/marcos/";
-    private List<Definicao> lista;
+    private List<EquipmentGroup> lista;
     private List<HashMap<String, String>> listaHashMap;
 
     // Atributos da biblioteca do Firebase.
     private FirebaseAuth auth; // Declaração do sistema de autenticação.
     private GoogleSignInClient googleSignInClient; // Declaração da autenticação do Google.
     private FirebaseAnalytics firebaseAnalytics; // Declaração do analytics.
-    FirebaseDatabase database; // Declaração do banco de dados.
-    DatabaseReference listDefRef, defRef; // Declaração de referencias do banco de dados.
+    private FirebaseDatabase database; // Declaração do banco de dados.
+    private DatabaseReference listDefRef, defRef; // Declaração de referencias do banco de dados.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         //  Função que instancia os atributos da interface e atributos da classe.
         bindView();
@@ -101,17 +98,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void bindView() {
+        setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        btnConnect = (MenuItem) findViewById(R.id.btnConnect);
+        btnDisconnect = toolbar.getMenu().findItem(R.id.btnDisconnect);
+        if ((MenuItem) findViewById(R.id.btnConnect)==null) Log.d(TAG, "Atributo btnConnect é null");
+        else btnConnect.setEnabled(true);
+        /*btnDisconnect.setEnabled(false);*/
+        setSupportActionBar(toolbar);
+
         // Referencia instancias da interface.
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.status_navigation_drawer_open, R.string.status_navigation_drawer_close);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerNav = navigationView.getHeaderView(0);
-        imageView = (ImageView) headerNav.findViewById(R.id.imageView);
-        txvName = (TextView) headerNav.findViewById(R.id.txvName);
-        txvEmail = (TextView) headerNav.findViewById(R.id.txvEmail);
-        btnConnect = toolbar.getMenu().findItem(R.id.btnConnect);
-        btnDisconnect = toolbar.getMenu().findItem(R.id.btnDisconnect);
+        imageView = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.imageView);
+        txvName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txvName);
+        txvEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txvEmail);
         listView = (ListView) findViewById(R.id.listView);
         btnAdd = (FloatingActionButton) findViewById(R.id.btnAdd);
 
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         listDefRef = database.getReference().child("listaDefinicao");
         defRef = listDefRef.child("definicao2");
 
-        lista = new ArrayList<Definicao>();
+        lista = new ArrayList<EquipmentGroup>();
         listaHashMap = new ArrayList<HashMap<String, String>>();
     }
 
@@ -228,12 +231,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if (btnConnect.isEnabled()) {
+        /*if (btnConnect.isEnabled()) {
             btnDisconnect.setEnabled(false);
         } else {
             btnDisconnect.setEnabled(true);
-        }
-
+        }*/
         // Função que carrega dados do banco de dados para a listview.
         loadDatabase();
     }
@@ -246,7 +248,7 @@ public class MainActivity extends AppCompatActivity
             // sempre que os dados neste local forem atualizados.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                List<Definicao> value = dataSnapshot.getValue(Definicao.class);
+//                List<EquipmentGroup> value = dataSnapshot.getValue(EquipmentGroup.class);
 //                loadListView(value);
             }
 
@@ -263,7 +265,7 @@ public class MainActivity extends AppCompatActivity
             // sempre que os dados neste local forem atualizados.
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Definicao value = dataSnapshot.getValue(Definicao.class);
+                EquipmentGroup value = dataSnapshot.getValue(EquipmentGroup.class);
                 Log.d(TAG, "Definição nome: "+value.getNome());
                 loadListView(value);
             }
@@ -276,12 +278,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void loadListView(Definicao definicao) {
+    private void loadListView(EquipmentGroup equipmentGroup) {
         try {
-            lista.add(definicao);
-            Log.d(TAG, "Definição: "+definicao.getNome());
+            lista.add(equipmentGroup);
+            Log.d(TAG, "Definição: "+ equipmentGroup.getNome());
             HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("nome", definicao.getNome());
+            hashMap.put("nome", equipmentGroup.getNome());
             listaHashMap.add(hashMap);
             String[] from= {"nome"};
             int[] to = {R.id.txName};

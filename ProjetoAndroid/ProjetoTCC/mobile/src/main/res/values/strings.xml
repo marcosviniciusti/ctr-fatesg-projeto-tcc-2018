@@ -31,7 +31,7 @@
     <string name="text_google_title">Google Sign In</string>
     <string name="text_google_status_fmt">Google User: %s</string>
 
-    <string name="desc_icon_app">Firebase logo and nome</string>
+    <string name="desc_icon_app">Firebase logo and email</string>
 
     <string name="action_create_account">Criar Conta</string>
     <string name="action_send_link">Enviar Link</string>
