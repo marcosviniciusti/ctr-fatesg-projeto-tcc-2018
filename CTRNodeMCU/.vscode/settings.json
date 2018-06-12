@@ -2,5 +2,13 @@
     "terminal.integrated.env.linux": {
         "PATH": "/home/eduardo/.platformio/penv/bin:/home/eduardo/.platformio/penv:/home/eduardo/ambiente-des/aplicativos/java/jdk1.8.0_161/bin:/home/eduardo/ambiente-des/aplicativos/java/jdk1.8.0_161/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/eduardo/ambiente-des/aplicativos/java/jdk1.8.0_161/bin:/home/eduardo/ambiente-des/aplicativos/android-studio/bin:/home/eduardo/ambiente-des/aplicativos/java/jdk1.8.0_161/bin:/home/eduardo/ambiente-des/aplicativos/android-studio/bin",
         "PLATFORMIO_CALLER": "vscode"
+    },
+    "files.associations": {
+        "array": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "initializer_list": "cpp"
     }
 }
