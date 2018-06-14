@@ -10,6 +10,7 @@ public class Usuario implements IEntidade {
     private String id;
     private String nome;
     private String email;
+    private EnumTipoUsuario tipo;
     private List<GrupoUsuario> gruposUsuario;
 
     @Exclude
@@ -43,6 +44,15 @@ public class Usuario implements IEntidade {
         return this;
     }
 
+    public EnumTipoUsuario getTipo() {
+        return tipo;
+    }
+
+    public Usuario setTipo(EnumTipoUsuario tipo) {
+        this.tipo = tipo;
+        return this;
+    }
+
     @Exclude
     public List<GrupoUsuario> getGruposUsuario() {
         return gruposUsuario;
@@ -55,6 +65,6 @@ public class Usuario implements IEntidade {
 
     /* ESTRUTURA PARA FIREBASE */
     public HashMap<String, Boolean> getGrupos() {
-            return gerarHashMapParaFirebase(gruposUsuario);
+        return gerarHashMapParaFirebase(gruposUsuario);
     }
 }

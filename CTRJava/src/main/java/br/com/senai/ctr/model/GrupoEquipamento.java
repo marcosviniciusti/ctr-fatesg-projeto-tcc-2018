@@ -8,6 +8,7 @@ import java.util.List;
 public class GrupoEquipamento implements IEntidade {
 
     private String id;
+    private String nome;
     private List<Equipamento> equipamentos;
 
     @Override
@@ -18,6 +19,15 @@ public class GrupoEquipamento implements IEntidade {
     @Override
     public GrupoEquipamento setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public GrupoEquipamento setNome(String nome) {
+        this.nome = nome;
         return this;
     }
 

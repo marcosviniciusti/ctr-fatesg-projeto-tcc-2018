@@ -1,8 +1,10 @@
 package br.com.senai.ctr.model;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
 
-public class Transmissao {
+public class Transmissao implements IEntidade {
 
     private String id;
     private Integer status;
@@ -11,10 +13,13 @@ public class Transmissao {
     private Comando comando;
     private Usuario usuario;
 
+    @Exclude
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public Transmissao setId(String id) {
         this.id = id;
         return this;
@@ -47,6 +52,7 @@ public class Transmissao {
         return this;
     }
 
+    @Exclude
     public Comando getComando() {
         return comando;
     }
@@ -56,6 +62,7 @@ public class Transmissao {
         return this;
     }
 
+    @Exclude
     public Usuario getUsuario() {
         return usuario;
     }
@@ -63,5 +70,14 @@ public class Transmissao {
     public Transmissao setUsuario(Usuario usuario) {
         this.usuario = usuario;
         return this;
+    }
+
+    /* ESTRUTURA PARA FIREBASE */
+    public String getComandoTransmissao() {
+        return comando.getId();
+    }
+
+    public String getUsuarioTransmissao() {
+        return usuario.getId();
     }
 }
