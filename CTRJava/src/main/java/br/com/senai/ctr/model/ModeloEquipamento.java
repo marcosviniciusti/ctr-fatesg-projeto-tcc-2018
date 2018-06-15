@@ -10,7 +10,7 @@ public class ModeloEquipamento implements IEntidade {
     private String id;
     private String nome;
     private Marca marca;
-    private TipoEquipamento tipo;
+    private EnumTipoEquipamento tipo;
     private List<Comando> comandos;
 
     @Exclude
@@ -45,16 +45,15 @@ public class ModeloEquipamento implements IEntidade {
     }
 
     @Exclude
-    public TipoEquipamento getTipo() {
+    public EnumTipoEquipamento getTipo() {
         return tipo;
     }
 
-    public ModeloEquipamento setTipo(TipoEquipamento tipo) {
+    public ModeloEquipamento setTipo(EnumTipoEquipamento tipo) {
         this.tipo = tipo;
         return this;
     }
 
-    @Exclude
     public List<Comando> getComandos() {
         return comandos;
     }
@@ -69,11 +68,7 @@ public class ModeloEquipamento implements IEntidade {
         return marca.getId();
     }
 
-    public String getTipoModelo() {
-        return tipo.getId();
-    }
-
-    public HashMap<String, Boolean> getComandosList() {
-        return gerarHashMapParaFirebase(comandos);
-    }
+//    public HashMap<String, Boolean> getComandosList() {
+//        return gerarHashMapParaFirebase(comandos);
+//    }
 }

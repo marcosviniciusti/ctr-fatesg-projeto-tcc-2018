@@ -50,6 +50,7 @@ public abstract class DAO<T extends IEntidade> {
 
         final Boolean[] complete = {false};
         objRef.setValue(obj, (error, ref) -> {
+            obj.setId(ref.getKey());
             complete[0] = true;
         });
         while (!complete[0]) {

@@ -8,14 +8,6 @@ public interface IEntidade {
 
     IEntidade setId(String id);
 
-//    default HashMap<String, Boolean> gerarHashMapParaFirebase(IEntidade ent) {
-//        HashMap<String, Boolean> ret = new HashMap<>();
-//        if (ent != null && ent.getId() != null) {
-//            ret.put(ent.getId(), true);
-//        }
-//        return ret;
-//    }
-
     default HashMap<String, Boolean> gerarHashMapParaFirebase(List lst) {
         return gerarHashMap(lst);
     }

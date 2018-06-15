@@ -12,6 +12,7 @@ public class Transmissao implements IEntidade {
     private Date dtHrTransmissao;
     private Comando comando;
     private Usuario usuario;
+    private Equipamento equipamento;
 
     @Exclude
     @Override
@@ -72,6 +73,16 @@ public class Transmissao implements IEntidade {
         return this;
     }
 
+    @Exclude
+    public Equipamento getEquipamento() {
+        return equipamento;
+    }
+
+    public Transmissao setEquipamento(Equipamento equipamento) {
+        this.equipamento = equipamento;
+        return this;
+    }
+
     /* ESTRUTURA PARA FIREBASE */
     public String getComandoTransmissao() {
         return comando.getId();
@@ -79,5 +90,9 @@ public class Transmissao implements IEntidade {
 
     public String getUsuarioTransmissao() {
         return usuario.getId();
+    }
+
+    public String getEquipamentoTransmissao() {
+        return equipamento.getId();
     }
 }
