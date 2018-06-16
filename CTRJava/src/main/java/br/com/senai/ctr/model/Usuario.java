@@ -11,7 +11,7 @@ public class Usuario implements IEntidade {
     private String nome;
     private String email;
     private EnumTipoUsuario tipo;
-    private List<GrupoUsuario> gruposUsuario;
+    private List<Grupo> grupos;
 
     @Exclude
     @Override
@@ -54,17 +54,17 @@ public class Usuario implements IEntidade {
     }
 
     @Exclude
-    public List<GrupoUsuario> getGruposUsuario() {
-        return gruposUsuario;
+    public List<Grupo> getGrupos() {
+        return grupos;
     }
 
-    public Usuario setGruposUsuario(List<GrupoUsuario> gruposUsuario) {
-        this.gruposUsuario = gruposUsuario;
+    public Usuario setGrupos(List<Grupo> grupos) {
+        this.grupos = grupos;
         return this;
     }
 
     /* ESTRUTURA PARA FIREBASE */
-    public HashMap<String, Boolean> getGrupos() {
-        return gerarHashMapParaFirebase(gruposUsuario);
+    public HashMap<String, Boolean> getGruposList() {
+        return gerarHashMapParaFirebase(grupos);
     }
 }

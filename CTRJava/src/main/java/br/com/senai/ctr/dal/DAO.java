@@ -50,7 +50,9 @@ public abstract class DAO<T extends IEntidade> {
 
         final Boolean[] complete = {false};
         objRef.setValue(obj, (error, ref) -> {
-            obj.setId(ref.getKey());
+            if (error == null) {
+                obj.setId(ref.getKey());
+            }
             complete[0] = true;
         });
         while (!complete[0]) {
@@ -96,6 +98,10 @@ public abstract class DAO<T extends IEntidade> {
         return map.get(id);
     }
 
+//    public T syncRetrieveByPath() {
+//        DatabaseReference objRef = reference.child(child)
+//    }
+
     HashMap<String, Boolean> syncRetrieveReferences(T obj, String listFieldName) {
         if (obj == null || obj.getId() == null) {
             return null;
@@ -105,7 +111,7 @@ public abstract class DAO<T extends IEntidade> {
 
         DatabaseReference objRef = reference.child(child).child(obj.getId()).child(listFieldName);
 
-        boolean[] complete = new boolean[] {false};
+        boolean[] complete = new boolean[]{false};
         objRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {

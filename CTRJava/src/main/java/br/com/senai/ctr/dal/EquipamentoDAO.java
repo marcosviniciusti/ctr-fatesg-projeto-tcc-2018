@@ -1,10 +1,9 @@
 package br.com.senai.ctr.dal;
 
 import br.com.senai.ctr.model.Equipamento;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
+
+import java.util.List;
 
 public class EquipamentoDAO extends DAO<Equipamento> {
 

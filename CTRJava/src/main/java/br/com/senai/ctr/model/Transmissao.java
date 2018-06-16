@@ -7,7 +7,6 @@ import java.util.Date;
 public class Transmissao implements IEntidade {
 
     private String id;
-    private Integer status;
     private Date dtHrSubmissao;
     private Date dtHrTransmissao;
     private Comando comando;
@@ -23,15 +22,6 @@ public class Transmissao implements IEntidade {
     @Override
     public Transmissao setId(String id) {
         this.id = id;
-        return this;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public Transmissao setStatus(Integer status) {
-        this.status = status;
         return this;
     }
 
@@ -86,6 +76,11 @@ public class Transmissao implements IEntidade {
     /* ESTRUTURA PARA FIREBASE */
     public String getComandoTransmissao() {
         return comando.getId();
+    }
+
+    public Transmissao setComandoTransmissao(String comandoTransmissao) {
+        comando = new Comando().setId(comandoTransmissao);
+        return this;
     }
 
     public String getUsuarioTransmissao() {

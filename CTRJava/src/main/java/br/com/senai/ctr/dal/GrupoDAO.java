@@ -1,15 +1,20 @@
 package br.com.senai.ctr.dal;
 
-import br.com.senai.ctr.model.ModeloEquipamento;
+import br.com.senai.ctr.model.Grupo;
+import br.com.senai.ctr.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-public class ModeloEquipamentoDAO extends DAO<ModeloEquipamento> {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-    public ModeloEquipamentoDAO(DatabaseReference reference) {
-        super(reference, "modelos");
+public class GrupoDAO extends DAO<Grupo> {
+
+    public GrupoDAO(DatabaseReference reference) {
+        super(reference, "grupos");
     }
 
     @Override
@@ -17,7 +22,7 @@ public class ModeloEquipamentoDAO extends DAO<ModeloEquipamento> {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                ModeloEquipamento obj = snapshot.getValue(ModeloEquipamento.class);
+                Grupo obj = snapshot.getValue(Grupo.class);
                 obj.setId(snapshot.getKey());
 
                 map.put(snapshot.getKey(), obj);
@@ -25,7 +30,7 @@ public class ModeloEquipamentoDAO extends DAO<ModeloEquipamento> {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                error.toException().printStackTrace();
+
             }
         };
     }

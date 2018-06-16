@@ -9,7 +9,7 @@ public class Marca implements IEntidade {
 
     private String id;
     private String nome;
-    private List<ModeloEquipamento> modelos;
+    private HashMap<String, Modelo> modelos;
 
     @Exclude
     @Override
@@ -32,18 +32,17 @@ public class Marca implements IEntidade {
         return this;
     }
 
-    @Exclude
-    public List<ModeloEquipamento> getModelos() {
+    public HashMap<String, Modelo> getModelos() {
         return modelos;
     }
 
-    public Marca setModelos(List<ModeloEquipamento> modelos) {
+    public Marca setModelos(HashMap<String, Modelo> modelos) {
         this.modelos = modelos;
         return this;
     }
 
     /* ESTRUTURA PARA FIREBASE */
-    public HashMap<String, Boolean> getModelosList() {
-        return gerarHashMapParaFirebase(modelos);
-    }
+//    public HashMap<String, Boolean> getModelosList() {
+//        return gerarHashMapParaFirebase(modelos);
+//    }
 }

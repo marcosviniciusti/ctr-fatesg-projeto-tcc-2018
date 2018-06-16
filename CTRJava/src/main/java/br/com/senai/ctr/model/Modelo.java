@@ -5,13 +5,13 @@ import com.google.firebase.database.Exclude;
 import java.util.HashMap;
 import java.util.List;
 
-public class ModeloEquipamento implements IEntidade {
+public class Modelo implements IEntidade {
 
     private String id;
     private String nome;
     private Marca marca;
     private EnumTipoEquipamento tipo;
-    private List<Comando> comandos;
+    private HashMap<String, Comando> comandos;
 
     @Exclude
     @Override
@@ -20,7 +20,7 @@ public class ModeloEquipamento implements IEntidade {
     }
 
     @Override
-    public ModeloEquipamento setId(String id) {
+    public Modelo setId(String id) {
         this.id = id;
         return this;
     }
@@ -29,7 +29,7 @@ public class ModeloEquipamento implements IEntidade {
         return nome;
     }
 
-    public ModeloEquipamento setNome(String nome) {
+    public Modelo setNome(String nome) {
         this.nome = nome;
         return this;
     }
@@ -39,7 +39,7 @@ public class ModeloEquipamento implements IEntidade {
         return marca;
     }
 
-    public ModeloEquipamento setMarca(Marca marca) {
+    public Modelo setMarca(Marca marca) {
         this.marca = marca;
         return this;
     }
@@ -49,26 +49,17 @@ public class ModeloEquipamento implements IEntidade {
         return tipo;
     }
 
-    public ModeloEquipamento setTipo(EnumTipoEquipamento tipo) {
+    public Modelo setTipo(EnumTipoEquipamento tipo) {
         this.tipo = tipo;
         return this;
     }
 
-    public List<Comando> getComandos() {
+    public HashMap<String, Comando> getComandos() {
         return comandos;
     }
 
-    public ModeloEquipamento setComandos(List<Comando> comandos) {
+    public Modelo setComandos(HashMap<String, Comando> comandos) {
         this.comandos = comandos;
         return this;
     }
-
-    /* ESTRUTURA PARA FIREBASE */
-    public String getMarcaModelo() {
-        return marca.getId();
-    }
-
-//    public HashMap<String, Boolean> getComandosList() {
-//        return gerarHashMapParaFirebase(comandos);
-//    }
 }

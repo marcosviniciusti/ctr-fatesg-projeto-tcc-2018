@@ -6,7 +6,7 @@ public class Equipamento implements IEntidade {
 
     private String id;
     private String nome;
-    private ModeloEquipamento modelo;
+    private Modelo modelo;
     private Emissor emissor;
 
     @Exclude
@@ -31,11 +31,11 @@ public class Equipamento implements IEntidade {
     }
 
     @Exclude
-    public ModeloEquipamento getModelo() {
+    public Modelo getModelo() {
         return modelo;
     }
 
-    public Equipamento setModelo(ModeloEquipamento modelo) {
+    public Equipamento setModelo(Modelo modelo) {
         this.modelo = modelo;
         return this;
     }
@@ -52,7 +52,17 @@ public class Equipamento implements IEntidade {
 
     /* ESTRUTURA PARA FIREBASE */
     public String getModeloEquipamento() {
-        return modelo.getId();
+        return modelo.getMarca().getId() + "/" + modelo.getId();
+    }
+
+    public Equipamento setModeloEquipamento(String modeloEquipamento) {
+        String[] dados = modeloEquipamento.split("/");
+        if (dados.length == 2) {
+            modelo = new Modelo()
+                    .setId(dados[1])
+                    .setMarca(new Marca().setId(dados[0]));
+        }
+        return this;
     }
 
     public String getEmissorEquipamento() {
