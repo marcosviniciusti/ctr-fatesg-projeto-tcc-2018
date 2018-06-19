@@ -6,28 +6,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
@@ -36,19 +32,22 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import br.com.marcosviniciusti.projetotcc.R;
-import br.com.marcosviniciusti.projetotcc.business.BAuth;
-import br.com.marcosviniciusti.projetotcc.entities.Equipment;
-import br.com.marcosviniciusti.projetotcc.entities.EquipmentGroup;
-import br.com.marcosviniciusti.projetotcc.util.EquipmentAdapter;
-import br.com.marcosviniciusti.projetotcc.util.EquipmentGroupAdapter;
+import br.com.marcosviniciusti.projetotcc.business.BEquipamento;
+import br.com.marcosviniciusti.projetotcc.business.BFirebaseAuth;
+import br.com.marcosviniciusti.projetotcc.business.BGrupoEquipamento;
+import br.com.marcosviniciusti.projetotcc.business.BUsuario;
+import br.com.marcosviniciusti.projetotcc.entities.EEquipamento;
+import br.com.marcosviniciusti.projetotcc.entities.EGrupoEquipamento;
+import br.com.marcosviniciusti.projetotcc.entities.EUsuario;
+import br.com.marcosviniciusti.projetotcc.util.EquipamentoAdapter;
+import br.com.marcosviniciusti.projetotcc.util.GrupoEquipamentoAdapter;
 
 
 /**
- * Uma tela de bAuth que oferece bAuth via email / senha.
+ * Uma tela de bFirebaseAuth que oferece bFirebaseAuth via email / senha.
  */
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,68 +59,80 @@ public class MainActivity extends BaseActivity
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private ImageView imageView;
-    private TextView txvName;
+    private TextView txvNome;
     private TextView txvEmail;
     private ListView listView;
 
     // Atributos da classe.
-    private static final String TAG = "AuthActivity";
-    private static final String EQUIPMENT_GROUP = "EQUIPMENT_GROUP";
-    private static final String EQUIPMENT = "EQUIPMENT";
+    private static final String TAG = "AutenticacaoActivity";
+    private static final String STATE_IMAGEVIEW = "STATE_IMAGEVIEW";
+    private static final String STATE_NOME = "STATE_NOME";
+    private static final String STATE_EMAIL = "STATE_EMAIL";
+    private static final String STATE_LISTA_GRUPO_EQUIPAMENTO = "STATE_LISTA_GRUPO_EQUIPAMENTO";
+    private static final String STATE_LISTA_EQUIPAMENTO = "STATE_LISTA_EQUIPAMENTO";
+    private static final String STATE_GRUPO_EQUIPAMENTO = "STATE_GRUPO_EQUIPAMENTO";
+    private static final String STATE_EQUIPAMENTO = "STATE_EQUIPAMENTO";
+    private static final String GRUPO_EQUIPAMENTO = "GRUPO_EQUIPAMENTO";
+    private static final String EQUIPAMENTO = "EQUIPAMENTO";
     private String window;
-    private List<EquipmentGroup> listEquipmentGroup;
-    private List<Equipment> listEquipments;
-    private EquipmentGroup equipmentGroup;
-    private Equipment equipment;
+    private View viewSelecionada;
+    private int viewPosicao;
+    private List<EGrupoEquipamento> listaGrupoEquipamentos;
+    private List<EEquipamento> listaEquipamentos;
+    private EGrupoEquipamento grupoEquipamento;
+    private EEquipamento equipamento;
+    private EUsuario usuario = new EUsuario();
     private Handler handler;
 
     // Atributos do Firebase.
-    private BAuth bAuth;
-    FirebaseDatabase database;
-    DatabaseReference equipGroupRef, equipRef;
+    private BFirebaseAuth bFirebaseAuth;
+    private BUsuario bUsuario;
+    private BGrupoEquipamento bGrupoEquipamento;
+    private BEquipamento bEquipamento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         Log.d(TAG, "Método onCreate");
         try {
             super.onCreate(savedInstanceState);
-            bind(); // Inicializa os atributos e referencias.
-            creatEvent(); // Cria eventos para os componentes da tela.
-            loadComponentsNav();
+//            restoreState(savedInstanceState);
+            Inicializar(); // Inicializa os atributos e referencias.
+            criarEventos(); // Cria eventos para os componentes da tela.
+            carregarComponentesNav();
         } catch (Exception error) {
             // Caso, haja algum erro, será imprimido no log.
             Log.e(TAG, "ERRO no método onCreate: "+error.getMessage(), error);
         }
     }
 
+//    private void restoreState(Bundle savedInstanceState) {
+//        if (savedInstanceState!=null) {
+//            // Restaura estados membros da instância salva.
+//            imageView.setImageAlpha(savedInstanceState.getInt(STATE_IMAGEVIEW));
+//            txvNome.setText(savedInstanceState.getString(STATE_NOME));
+//            txvEmail.setText(savedInstanceState.getString(STATE_EMAIL));
+//            listView.setTextAlignment(savedInstanceState.getInt(STATE_LISTVIEW));
+//        }
+//    }
+
     // Inicializa os atributos e referencias.
-    private void bind() {
-        Log.d(TAG, "Método bind");
+    private void Inicializar() {
+        Log.d(TAG, "Método Inicializar");
         try {
             // Referencia a tela XML.
             setContentView(R.layout.activity_main);
 
-            // Referencia os componentes da interface.
-            inicilizeComponetsInterface();
-
-            // Inicializa objeto de negócios do login (passando o id do cliente web padrão e o
-            // contexto da aplicação).
-            bAuth = new BAuth(getString(R.string.default_web_client_id), this);
-
-            // Inicializa atributos da classe.
-            inicializeVarClass();
-
-            // Inicializa e referencia atributos do Firebase.
-            inicializeFirebase();
+            inicilizarComponentesDaInterface();
+            inicializarAtributosDaClasse();
+            inicializarFirebase();
 
         } catch (Exception error) {
             // Caso, haja algum erro, será imprimido no log.
-            Log.e(TAG, "ERRO no método bind: "+error.getMessage(), error);
+            Log.e(TAG, "ERRO no método Inicializar: "+error.getMessage(), error);
         }
     }
 
-    private void inicilizeComponetsInterface() {
+    private void inicilizarComponentesDaInterface() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         btnAdd = (FloatingActionButton) findViewById(R.id.btnAdd);
@@ -133,102 +144,168 @@ public class MainActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         imageView = navigationView.getHeaderView(0).findViewById(R.id.imageView);
-        txvName = navigationView.getHeaderView(0).findViewById(R.id.txvName);
+        txvNome = navigationView.getHeaderView(0).findViewById(R.id.txvNome);
         txvEmail = navigationView.getHeaderView(0).findViewById(R.id.txvEmail);
         listView = findViewById(R.id.listView);
     }
 
-    private void inicializeVarClass() {
-        window = EQUIPMENT_GROUP;
-        listEquipmentGroup = new ArrayList<EquipmentGroup>();
-        listEquipments = new ArrayList<Equipment>();
-        equipmentGroup = new EquipmentGroup();
-        equipment = new Equipment();
+    private void inicializarAtributosDaClasse() {
+        window = GRUPO_EQUIPAMENTO;
+        viewSelecionada = null;
+        viewPosicao = -1;
+        listaGrupoEquipamentos = new ArrayList<EGrupoEquipamento>();
+        listaEquipamentos = new ArrayList<EEquipamento>();
+        grupoEquipamento = new EGrupoEquipamento();
+        equipamento = new EEquipamento();
         handler = new Handler();
     }
 
+    private void inicializarFirebase() {
+        // Inicializa objeto de negócios da API do Firebase.
+        bFirebaseAuth = new BFirebaseAuth(getString(R.string.default_web_client_id), this);
 
-    private void inicializeFirebase() {
-        // Inicializa objeto de negócios do login (passando o id do cliente web padrão e o contexto
-        // da aplicação).
-        bAuth = new BAuth(getString(R.string.default_web_client_id), this);
-
-        // Referencia a instância do banco de dados do Firebase.
-        database = FirebaseDatabase.getInstance();
-
-        // Permiti salvar, alterar arquivos em nuvem e também dentro do app.
-        database.setPersistenceEnabled(true);
-
-        // Referencia nós do banco de dados.
-        equipGroupRef = database.getReference().child("listEquipmentGroup");
+        // Inicializa objeto de negócios do database.
+        bUsuario = new BUsuario();
+        bGrupoEquipamento = new BGrupoEquipamento();
+        bEquipamento = new BEquipamento();
     }
 
     // Cria eventos;
-    private void creatEvent() {
-        Log.d(TAG, "Método creatEvent");
+    private void criarEventos() {
+        Log.d(TAG, "Método criarEventos");
         try {
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (window.equals(EQUIPMENT_GROUP))
-                        startActivity(createIntent(MainActivity.this, FormGroupEquipmentActivity.class, listEquipmentGroup));
-                    else
-                        startActivity(createIntent(MainActivity.this, FormEquipmentActivity.class, equipment));
-                }
-            });
-
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (window.equals(EQUIPMENT_GROUP)) {
-                        HashMap<String, EquipmentGroup> hashMap =
-                                (HashMap<String, EquipmentGroup>) parent.getItemAtPosition(position);
-                        equipmentGroup = hashMap.get("equipment");
-                    } else {
 
+                    if (window.equals(GRUPO_EQUIPAMENTO)) {
+                        if (viewSelecionada == null || viewSelecionada != view) {
+                            view.setSelected(true);
+                            viewSelecionada = view;
+                            viewPosicao = position;
+                            grupoEquipamento = (EGrupoEquipamento) listView
+                                    .getItemAtPosition(viewPosicao);
+                        } else {
+                            viewSelecionada = null;
+                        }
+                    } else {
+                        if (viewSelecionada == null || viewSelecionada != view) {
+                            view.setSelected(true);
+                            viewSelecionada = view;
+                            viewPosicao = position;
+                            equipamento = (EEquipamento) listView
+                                    .getItemAtPosition(viewPosicao);
+                        } else {
+                            viewSelecionada = null;
+                            viewPosicao = -1;
+                        }
                     }
                 }
             });
 
+//            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                @Override
+//                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                    return false;
+//                }
+//            });
+
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (viewSelecionada != null) {
+                        if (window.equals(GRUPO_EQUIPAMENTO)) {
+                            grupoEquipamento = (EGrupoEquipamento) listView
+                                    .getItemAtPosition(viewPosicao);
+                            startActivity(criarIntent(MainActivity.this,
+                                    FormularioActivity.class, grupoEquipamento, viewPosicao, window));
+                        } else {
+                            equipamento = (EEquipamento) listView
+                                    .getItemAtPosition(viewPosicao);
+                            startActivity(criarIntent(MainActivity.this,
+                                    FormularioActivity.class, grupoEquipamento, viewPosicao, window));
+                        }
+                    } else {
+                        if (window.equals(GRUPO_EQUIPAMENTO))
+                            startActivity(criarIntent(MainActivity.this,
+                                    FormularioActivity.class, null, viewPosicao, window));
+                        else
+                            startActivity(criarIntent(MainActivity.this,
+                                    FormularioActivity.class, grupoEquipamento, viewPosicao, window));
+                    }
+                }
+            });
         } catch (Exception error) {
             Log.e(TAG, "ERRO no método createEvent: "+error.getMessage(), error);
         }
     }
 
     // Cria uma intenção para enviar para outra janela.
-    private Intent createIntent(Context context, Class aClass, Object object) {
-        Log.d(TAG, "Método createIntent");
+    private Intent criarIntent(Context context, Class aClass, Object objeto, int posicao,
+                               String window) {
+        Log.d(TAG, "Método criarIntent");
         try {
             Intent intent = new Intent(context, aClass);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("objeto", (Serializable) object);
+            bundle.putSerializable("objeto", (Serializable) objeto);
+            bundle.putInt("posicao", posicao);
+            bundle.putString("window", window);
             intent.putExtra("bundle", bundle);
             return intent;
         } catch (Exception error) {
-            Log.e(TAG, "ERRO no método createIntent: "+error.getMessage(), error);
+            Log.e(TAG, "ERRO no método criarIntent: "+error.getMessage(), error);
         }
         return null;
     }
 
-    private void loadComponentsNav() {
-        Log.d(TAG, "Método loadComponentsNav");
+    private void carregarComponentesNav() {
+        Log.d(TAG, "Método carregarComponentesNav");
         try {
-            loadImageBitmap();
-            txvName.setText(bAuth.getUser().getDisplayName());
-            txvEmail.setText(bAuth.getUser().getEmail());
+            if (validarAutenticacao()) {
+                carregarImageBitmap();
+                if (validarCampoNome()) {
+                    usuario.setId(bFirebaseAuth.getUser().getUid());
+                    bUsuario.consultar(usuario, new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            usuario = dataSnapshot.getValue(EUsuario.class);
+                            txvNome.setText(usuario.getNome());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                } else {
+                    txvNome.setText(bFirebaseAuth.getUser().getDisplayName());
+                }
+                txvEmail.setText(bFirebaseAuth.getUser().getEmail());
+            }
         } catch (Exception error) {
-            Log.e(TAG, "ERRO no método loadComponentsNav: "+error.getMessage(), error);
+            Log.e(TAG, "ERRO no método carregarComponentesNav: "+error.getMessage(), error);
         }
     }
 
-    private void loadImageBitmap() {
+    private boolean validarAutenticacao() {
+        return bFirebaseAuth.hasAuth() && bFirebaseAuth.getUser().getEmail() != null
+                && !bFirebaseAuth.getUser().getEmail().isEmpty();
+    }
+
+    private boolean validarCampoNome() {
+        return bFirebaseAuth.getUser().getDisplayName() == null
+                || bFirebaseAuth.getUser().getDisplayName().isEmpty();
+    }
+
+    private void carregarImageBitmap() {
         new Thread() {
             public void run(){
-                Log.d(TAG, "Método loadImageBitmap");
+                Log.d(TAG, "Método carregarImageBitmap");
                 try {
-                    if (bAuth.getUser().getPhotoUrl() != null) {
+                    if (bFirebaseAuth.getUser().getPhotoUrl() != null) {
                         // Cria objeto para abrir conexão.
-                        URL url = new URL(bAuth.getUser().getPhotoUrl().toString());
+                        URL url = new URL(bFirebaseAuth.getUser().getPhotoUrl().toString());
                         // Aqui abri uma conexão.
                         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                         // Aqui baixa a imagem.
@@ -245,9 +322,9 @@ public class MainActivity extends BaseActivity
                         });
                     }
                 } catch (IOException e) {
-                    Log.e(TAG, "ERRO no método loadImageBitmap: "+e.getMessage(), e);
+                    Log.e(TAG, "ERRO no método carregarImageBitmap: "+e.getMessage(), e);
                 } catch (Exception error) {
-                    Log.e(TAG, "ERRO no método loadImageBitmap: "+error.getMessage(), error);
+                    Log.e(TAG, "ERRO no método carregarImageBitmap: "+error.getMessage(), error);
                 }
             }
         }.start();
@@ -258,9 +335,13 @@ public class MainActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (window.equals(EQUIPAMENTO)){
+            window = GRUPO_EQUIPAMENTO;
+            onStart();
         } else {
-            super.onBackPressed();
+            onStart();
         }
+//        super.onBackPressed();
     }
 
     @Override
@@ -277,65 +358,93 @@ public class MainActivity extends BaseActivity
         try {
             super.onStart();
             // Verifica se existe alguma autentificação e atualiza a interface de acordo.
-            loadDatabase();
+            consultarBancoDeDados();
         } catch (Exception error) {
             Log.e(TAG,"ERRO no método onStart: "+error.getMessage(), error);
         }
     }
 
-    public void loadDatabase() {
-        Log.d(TAG, "Método loadDatabase");
+    private void consultarBancoDeDados() {
+        Log.d(TAG, "Método consultarBancoDeDados");
         try {
-            if (window.equals(EQUIPMENT_GROUP)) {
-                equipGroupRef.addValueEventListener(new ValueEventListener() {
+            if (window.equals(GRUPO_EQUIPAMENTO)) {
+                bGrupoEquipamento.listar(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String value = dataSnapshot.getValue(String.class);
-                        equipmentGroup.setName(value);
-                        loadListView(equipmentGroup);
+                        listaGrupoEquipamentos.clear();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            EGrupoEquipamento grupoEquipamento = child.getValue(EGrupoEquipamento.class);
+                            grupoEquipamento.setId(child.getKey());
+                            if (bFirebaseAuth.getUser().getUid().equals(grupoEquipamento.getIdUsuarioDono())) {
+                                listaGrupoEquipamentos.add(grupoEquipamento);
+                            }
+                        }
+                        loadListView(listaGrupoEquipamentos);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "ERRO na comunicação com a referencia equipGroupRef: "+databaseError.getMessage(), databaseError.toException());
+                        Log.w(TAG, "Não foi possível acessar o database.");
                     }
                 });
-
             } else {
-                equipRef.addValueEventListener(new ValueEventListener() {
+                bEquipamento.listar(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String value = dataSnapshot.getValue(String.class);
-                        equipmentGroup.setName(value);
-                        loadListView(equipmentGroup);
+                        listaEquipamentos.clear();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            EEquipamento equipamento = child.getValue(EEquipamento.class);
+                            equipamento.setId(child.getKey());
+                            if (grupoEquipamento.getId().equals(equipamento.getIdGrupoEquipamento())) {
+                                listaEquipamentos.add(equipamento);
+                            }
+                        }
+                        grupoEquipamento.setEquipamentos(listaEquipamentos);
+                        loadListView(grupoEquipamento);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "ERRO na comunicação com a referencia: "+databaseError.getMessage(), databaseError.toException());
+
                     }
                 });
             }
-
         } catch (Exception error) {
-            Log.e(TAG, "ERRO no método loadDatabase: "+error.getMessage(), error);
+            Log.e(TAG, "ERRO no método consultarBancoDeDados: "+error.getMessage(), error);
         }
     }
 
-    public void loadListView(EquipmentGroup equipmentGroup) {
+    private void loadListView(Object object) {
         Log.d(TAG, "Método loadListView");
         try {
-            if (window.equals(EQUIPMENT_GROUP)) {
-                listEquipmentGroup.add(equipmentGroup);
-                EquipmentGroupAdapter adapter = new EquipmentGroupAdapter(this, listEquipmentGroup);
+            if (window.equals(GRUPO_EQUIPAMENTO) && object instanceof List) {
+                GrupoEquipamentoAdapter adapter =
+                        new GrupoEquipamentoAdapter(this, (List<EGrupoEquipamento>) object);
                 listView.setAdapter(adapter);
             } else {
-                listEquipmentGroup.add(equipmentGroup);
-//                EquipmentAdapter adapter = new EquipmentAdapter(this, listEquipmentGroup);
+                EquipamentoAdapter adapter =
+                        new EquipamentoAdapter(this, (EGrupoEquipamento) object);
+
+                listView.setAdapter(adapter);
             }
         } catch (Exception error) {
             Log.e(TAG, "ERRO no método loadListView: "+error.getMessage(), error);
         }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Sempre chame a superclasse para que possa
+        // restaurar a hierarquia da view.
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restaura estados membros da instância salva.
+        imageView.setImageAlpha(savedInstanceState.getInt(STATE_IMAGEVIEW));
+        txvNome.setText(savedInstanceState.getString(STATE_NOME));
+        txvEmail.setText(savedInstanceState.getString(STATE_EMAIL));
+
+        grupoEquipamento = (EGrupoEquipamento) savedInstanceState.getSerializable(STATE_GRUPO_EQUIPAMENTO);
+        equipamento = (EEquipamento) savedInstanceState.getSerializable(STATE_EQUIPAMENTO);
     }
 
     @Override
@@ -349,28 +458,41 @@ public class MainActivity extends BaseActivity
         if (id == R.id.btnConnect) {
             item.setVisible(false);
             toolbar.getMenu().findItem(R.id.btnDisconnect).setVisible(true);
-            return true;
         }
         if (id == R.id.btnDisconnect) {
             item.setVisible(false);
             toolbar.getMenu().findItem(R.id.btnConnect).setVisible(true);
-            return true;
         }
         if (id == R.id.btnOpen) {
-            window = EQUIPMENT;
-            item.setVisible(false);
-            loadDatabase();
-            return true;
+            if (viewSelecionada != null) {
+                window = EQUIPAMENTO;
+                viewSelecionada = null;
+                viewPosicao = -1;
+                consultarBancoDeDados();
+            } else {
+                Toast.makeText(getApplicationContext(), "Selecione um item da lista.", Toast.LENGTH_SHORT).show();
+            }
         }
-        if (id == R.id.btnUpdate) {
-            return true;
+        if (id == R.id.btnDelete) {
+            if (viewSelecionada != null) {
+                if (window.equals(GRUPO_EQUIPAMENTO)) {
+                    grupoEquipamento = (EGrupoEquipamento) listView
+                            .getItemAtPosition(viewPosicao);
+                    bGrupoEquipamento.deletar(grupoEquipamento);
+                } else if (window.equals(EQUIPAMENTO)) {
+                    equipamento = (EEquipamento) listView
+                            .getItemAtPosition(viewPosicao);
+                    bEquipamento.deletar(equipamento);
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Selecione um item da lista.", Toast.LENGTH_SHORT);
+            }
         }
         if (id == R.id.btnControlRemote) {
-            startActivity(createIntent(this, RemoteControlActivity.class, null));
-            return true;
+            startActivity(criarIntent(this, RemoteControlActivity.class, null, viewPosicao, null));
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -391,17 +513,28 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    // Sair da conta do usuário no aplicativo.
     private void signOut() {
-        Log.d(TAG, "Método signOut");
-        showProgressDialog();
-        bAuth.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        finish();
-                    }
-                });
-        hideProgressDialog();
+        try {
+            bFirebaseAuth.signOut();
+            finish();
+        } catch (Exception error) {
+            Log.e(TAG, "ERRO no método signOut: "+error.getMessage(), error);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        // Salva o estado atual do jogo do usuário
+        savedInstanceState.putInt(STATE_IMAGEVIEW, imageView.getImageAlpha());
+        savedInstanceState.putString(STATE_NOME, txvNome.getText().toString());
+        savedInstanceState.putString(STATE_EMAIL, txvEmail.getText().toString());
+        savedInstanceState.putSerializable(STATE_LISTA_GRUPO_EQUIPAMENTO, (Serializable) listaGrupoEquipamentos);
+        savedInstanceState.putSerializable(STATE_LISTA_EQUIPAMENTO, (Serializable) listaEquipamentos);
+        savedInstanceState.putSerializable(STATE_GRUPO_EQUIPAMENTO, grupoEquipamento);
+        savedInstanceState.putSerializable(STATE_EQUIPAMENTO, equipamento);
+
+        // Sempre chame a superclasse para que seja salvo
+        // o estado da hierarquia da view
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

@@ -6,7 +6,7 @@
     android:background="@drawable/selector_item_list">
 
     <TextView
-        android:id="@+id/txName"
+        android:id="@+id/txvNomeItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/margin_dp"

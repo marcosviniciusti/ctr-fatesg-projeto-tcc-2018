@@ -22,7 +22,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".teste.AuthActivity"
+            android:name=".activities.AutenticacaoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -32,19 +32,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".teste.MainActivity"
+            android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".teste.FormGroupEquipmentActivity"
+            android:name=".activities.FormularioActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".teste.FormEquipmentActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".teste.RemoteControlActivity"
+            android:name=".activities.RemoteControlActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
     </application>

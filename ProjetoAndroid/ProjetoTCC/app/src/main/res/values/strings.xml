@@ -48,6 +48,7 @@
     <string name="action_save">Salvar</string>
     <string name="action_cancel">Cancelar</string>
     <string name="action_update">Atualizar</string>
+    <string name="action_delete">Delete</string>
     <string name="action_control">Controle Remoto</string>
 
     <string name="status_signed_in">Conectado</string>

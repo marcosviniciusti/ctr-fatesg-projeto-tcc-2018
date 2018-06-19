@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <integer name="RC_SIGN_IN">9001</integer>
-    <integer name="RC_GROUP_EQUIPMENT">8001</integer>
-    <integer name="RC_EQUIPMENT">8002</integer>
-
-</resources>
