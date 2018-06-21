@@ -4,8 +4,7 @@
 
 /*______________________INFRAVERMELHO______________________*/
 #include <IRremoteESP8266.h>
-#include <IRrecv.h>
-#include <IRutils.h>
+#include <IRsend.h>
 
 /*__________________________JSON___________________________*/
 #include <ArduinoJson.h>
@@ -15,28 +14,33 @@
 
 /*__________________________MQTT___________________________*/
 #include <PubSubClient.h>
+// Para projetos recem importados: é necessário alterar
+// PubSubClient.h na definição da variável global
+// MQTT_MAX_PACKET_SIZE para o valor 2048
+// para que o programa funcione corretamente
 /*---------------------------------------------------------*/
 
 /*______________________CONFIGURAÇÕES______________________*/
 
-#define WIFI_SSID "*"     // Nome da rede WiFi
-#define WIFI_PASSWORD "*" // Senha da rede WiFi
+#define WIFI_SSID "Visitantes"         // Nome da rede WiFi
+#define WIFI_PASSWORD "bem-vindos"     // Senha da rede WiFi
 
-#define MQTT_SERVER "*"              // Endereço do broker MQTT Mosquitto
-#define MQTT_PORT 1883               // Porta utilizada pelo broker
-#define MQTT_BROKER_TOPICO "MQTTCTR" // Tópico de inscrição do dispositivo
+#define MQTT_SERVER "192.168.1.215"    // Endereço do broker MQTT Mosquitto
+#define MQTT_PORT 1883                 // Porta utilizada pelo broker
+#define MQTT_BROKER_TOPICO "CTRBroker" // Tópico de inscrição do dispositivo
 
 #define GREEN_LED 12 // Led para eventuais testes
-#define IV_LED 4     // Sinal enviado para a base do transistor ou led Infravermelho
+#define IR_LED 4     // Sinal enviado para a base do transistor ou led Infravermelho
 
-#define ID_EMISSOR "e94jr8tg" // Identificação do dispositivo
+#define IR_BUFFER_SIZE 256 // Tamanho do buffer de parâmetros da transmissão Infravermelho
 
+#define ID_EMISSOR "abcdefg" // Identificação do dispositivo
 /*_________________________________________________________*/
 
 /*____________________VARIÁVEIS GLOBAIS____________________*/
 WiFiClient espClient;
 PubSubClient MQTT(espClient);
-char EstadoSaida = '0';
+IRsend irsend(IR_LED);  // Set the GPIO to be used to sending the message.
 /*_________________________________________________________*/
 
 /*____________________DEFINE PROTOTIPOS____________________*/
@@ -52,8 +56,9 @@ void verificarWifiMQTT();
 /*__________________________SETUP__________________________*/
 void setup()
 {
+  irsend.begin();
   inicializaSaida();
-  Serial.begin(9600);
+  Serial.begin(115200);
   inicializaWiFi();
   inicializaMQTT();
 }
@@ -134,14 +139,12 @@ void reconectarMQTT()
     Serial.println(MQTT_SERVER);
     if (MQTT.connect(ID_EMISSOR))
     {
-      Serial.println("Conectado com sucesso ao broker MQTT!");
-      String msg = ID_EMISSOR;
-
-      StaticJsonBuffer<200> jsonBuffer;
-      JsonObject &root = jsonBuffer.createObject();
-      root["id"] = ID_EMISSOR;
-      root["operacao"] = 0;
-      root.printTo(msg);
+      Serial.println("Conectado com sucesso ao broker MQTT");
+      // {"id" : "abcdefg", "op" : 1}
+      String msg = String();
+      msg.concat("{\"id\":\"");
+      msg.concat(ID_EMISSOR);
+      msg.concat("\",\"op\":1}");
 
       MQTT.publish(MQTT_BROKER_TOPICO, (char *)msg.c_str());
       MQTT.subscribe(ID_EMISSOR);
@@ -149,7 +152,7 @@ void reconectarMQTT()
     else
     {
       Serial.println("Falha ao reconectar no broker.");
-      Serial.println("Haverá nova tentatica de conexao em 2s");
+      Serial.println("Haverá nova tentativa de conexao em 2s");
       delay(2000);
     }
   }
@@ -165,14 +168,25 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
     msg += c;
   }
 
-  DynamicJsonBuffer jsonBuffer(1024);
+  DynamicJsonBuffer jsonBuffer(2048);
 
   JsonObject &root = jsonBuffer.parseObject(msg);
 
   if (!root.success())
   {
-    Serial.println("parseObject() failed");
+    Serial.println("Erro ao interpretar mensagem");
     return;
   }
+
+  int tamanho_comando = root["size"];
+  uint16_t rawData[IR_BUFFER_SIZE];
+  for (int i = 0; i < tamanho_comando; i++)  
+  {
+    rawData[i] = root["rawData"][i];
+  }
+
+  irsend.sendRaw(rawData, tamanho_comando, 38);
+
+  Serial.println("Comando enviado");
 }
 /*_________________________________________________________*/
