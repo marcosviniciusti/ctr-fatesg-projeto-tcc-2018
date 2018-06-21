@@ -74,20 +74,33 @@ public class Transmissao implements IEntidade {
     }
 
     /* ESTRUTURA PARA FIREBASE */
+    private String comandoTransmissao;
+
     public String getComandoTransmissao() {
-        return comando.getId();
+        if (comando != null) {
+            return comando.getId();
+        } else {
+            return comandoTransmissao;
+        }
     }
 
-    public Transmissao setComandoTransmissao(String comandoTransmissao) {
-        comando = new Comando().setId(comandoTransmissao);
-        return this;
-    }
+    private String usuarioTransmissao;
 
     public String getUsuarioTransmissao() {
-        return usuario.getId();
+        if (usuario != null) {
+            return usuario.getId();
+        } else {
+            return usuarioTransmissao;
+        }
     }
 
+    private String equipamentoTransmissao;
+
     public String getEquipamentoTransmissao() {
-        return equipamento.getId();
+        if (equipamento != null) {
+            return equipamento.getId();
+        } else {
+            return equipamentoTransmissao;
+        }
     }
 }
