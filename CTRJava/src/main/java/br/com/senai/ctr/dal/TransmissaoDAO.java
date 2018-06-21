@@ -1,11 +1,16 @@
 package br.com.senai.ctr.dal;
 
-import br.com.senai.ctr.App;
+import br.com.senai.ctr.CTRBroker;
 import br.com.senai.ctr.model.Comando;
 import br.com.senai.ctr.model.Equipamento;
 import br.com.senai.ctr.model.Transmissao;
+import br.com.senai.ctr.mqtt.MQTTClientManager;
 import com.google.firebase.database.*;
+import org.json.JSONObject;
 
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class TransmissaoDAO extends DAO<Transmissao> {
@@ -32,96 +37,88 @@ public class TransmissaoDAO extends DAO<Transmissao> {
         };
     }
 
-    public void syncTransmissaoByEmissor(final String id_emissor, final ConcurrentLinkedDeque<Transmissao> transmissoes) {
-
-        reference.child("equipamentos").orderByChild("emissorEquipamento").equalTo(id_emissor)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot snapshot, String previousChildName) {
-                        Equipamento e = snapshot.getValue(Equipamento.class);
-                        e.setId(snapshot.getKey());
-                        System.out.println(e.getId());
-
-                        reference.child("transmissoes").orderByChild("equipamentoTransmissao").equalTo(e.getId())
-                                .addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot snapshot, String previousChildName) {
-                                        Transmissao t = snapshot.getValue(Transmissao.class);
-                                        t.setId(snapshot.getKey());
-                                        System.out.println(e.getModeloEquipamento());
-                                        System.out.println(t.getId());
-
-//                                        String[] modelo = e.getModeloEquipamento().split("/");
-//                                        if (modelo.length == 2) {
-//                                            reference
-//                                                    .child("marcas")
-//                                                    .child(modelo[0])
-//                                                    .child("modelos")
-//                                                    .child(modelo[1])
-//                                                    .child("comandos").child(t.getComandoTransmissao())
-//                                                    .addValueEventListener(new ValueEventListener() {
-//                                                        @Override
-//                                                        public void onDataChange(DataSnapshot snapshot) {
-//                                                            Comando c = snapshot.getValue(Comando.class);
-//                                                            c.setId(snapshot.getKey());
-//
-//                                                            t.setComando(c);
-//                                                            System.out.println(c.getId());
-//                                                            System.out.println(c.getRawData().size());
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onCancelled(DatabaseError error) {
-//
-//                                                        }
-//                                                    });
-//                                        }
-
-
-                                    }
-
-                                    @Override
-                                    public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot snapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot snapshot, String previousChildName) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError error) {
-
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot snapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot snapshot, String previousChildName) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-
-                    }
-                });
-
+    public List<Transmissao> syncRetrieveTransmissoesPendentesByEquipamento(Equipamento equipamento) {
+        return syncRetrieveTransmissoesPendentesByEquipamento(equipamento.getId());
     }
+
+    public List<Transmissao> syncRetrieveTransmissoesPendentesByEquipamento(String idEquipamento) {
+        List<Transmissao> transmissoes = new LinkedList<>();
+        final boolean[] buscando = new boolean[]{true};
+
+        Query query = reference.child(child).orderByChild("equipamentoTransmissao").equalTo(idEquipamento);
+        ValueEventListener listener = query.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot s : snapshot.getChildren()) {
+                    Transmissao e = s.getValue(Transmissao.class);
+                    if (e.getDtHrTransmissao() == null) {
+                        e.setId(s.getKey());
+
+                        transmissoes.add(e);
+                    }
+                }
+                buscando[0] = false;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
+            }
+        });
+
+        while (buscando[0]) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+//                e.printStackTrace();
+            }
+        }
+        query.removeEventListener(listener);
+
+        return transmissoes;
+    }
+
+//    public void syncTransmissaoByEmissor(final String id_emissor, final ConcurrentLinkedDeque<CTRBroker.TransmissaoIR> transmissoes) {
+//
+//        reference.child("equipamentos").orderByChild("emissorEquipamento").equalTo(id_emissor)
+//                .addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot snapshot) {
+//                        for (DataSnapshot s : snapshot.getChildren()) {
+//                            Equipamento e = s.getValue(Equipamento.class);
+//                            e.setId(s.getKey());
+//
+//                            String[] m = e.getModeloEquipamento().split("/");
+//                            if (m.length == 2) {
+//                                reference.child("transmissoes").orderByChild("equipamentoTransmissao").equalTo(e.getId())
+//                                        .addValueEventListener(new ValueEventListener() {
+//                                            @Override
+//                                            public void onDataChange(DataSnapshot snapshot) {
+//                                                for (DataSnapshot s : snapshot.getChildren()) {
+//                                                    Transmissao t = s.getValue(Transmissao.class);
+//                                                    t.setId(s.getKey());
+//
+//
+//                                                }
+//                                            }
+//
+//                                            @Override
+//                                            public void onCancelled(DatabaseError error) {
+//
+//                                            }
+//                                        });
+//                            }
+//
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError error) {
+//
+//                    }
+//                });
+//
+//    }
 }
