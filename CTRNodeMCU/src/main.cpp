@@ -22,10 +22,10 @@
 
 /*______________________CONFIGURAÇÕES______________________*/
 
-#define WIFI_SSID "Visitantes"         // Nome da rede WiFi
-#define WIFI_PASSWORD "bem-vindos"     // Senha da rede WiFi
+#define WIFI_SSID "*"         // Nome da rede WiFi
+#define WIFI_PASSWORD "*"     // Senha da rede WiFi
 
-#define MQTT_SERVER "192.168.1.215"    // Endereço do broker MQTT Mosquitto
+#define MQTT_SERVER "*"    // Endereço do broker MQTT Mosquitto
 #define MQTT_PORT 1883                 // Porta utilizada pelo broker
 #define MQTT_BROKER_TOPICO "CTRBroker" // Tópico de inscrição do dispositivo
 
