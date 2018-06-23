@@ -7,7 +7,6 @@ import br.com.senai.ctr.model.Comando;
 import br.com.senai.ctr.model.Emissor;
 import br.com.senai.ctr.model.Equipamento;
 import br.com.senai.ctr.model.Transmissao;
-import br.com.senai.ctr.mqtt.MQTTClientManager;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -50,28 +49,21 @@ public class MonitorTransmissoes implements Runnable {
                 Emissor em = CTRBroker.emissores.get(k);
                 if (em != null) {
                     for (Equipamento e : eqdao.syncRetrieveEquipamentosByEmissor(em.getId())) {
-                        String[] equipamentoModelo = e.getModeloEquipamento().split("/");
-                        if (equipamentoModelo.length == 2) {
-                            List<Transmissao> transmissoes = trdao.syncRetrieveTransmissoesPendentesByEquipamento(e);
-                            for (Transmissao t : transmissoes) {
+                        List<Transmissao> transmissoes = trdao.syncRetrieveTransmissoesPendentesByEquipamento(e);
+                        for (Transmissao t : transmissoes) {
 
-                                Comando c = codao
-                                        .syncRetrieveComando(
-                                                equipamentoModelo[0],
-                                                equipamentoModelo[1],
-                                                t.getComandoTransmissao()
-                                        );
-                                TransmissaoIR tir = new TransmissaoIR()
-                                        .setIdTransmissao(t.getId())
-                                        .setIdEmissor(em.getId())
-                                        .setRawData(c.getRawData())
-                                        .setType("T");
+                            Comando c = codao.syncRetrieve(
+                                    t.getComandoTransmissao()
+                            );
+                            TransmissaoIR tir = new TransmissaoIR()
+                                    .setIdEmissor(em.getId())
+                                    .setRawData(c.getRawData())
+                                    .setType("T");
 
-                                t.setDtHrTransmissao(new Date());
-                                trdao.update(t);
+                            t.setDtHrTransmissao(new Date());
+                            trdao.update(t);
 
-                                CTRBroker.transmissoes.addLast(tir);
-                            }
+                            CTRBroker.transmissoes.addLast(tir);
                         }
 
                     }
@@ -96,7 +88,7 @@ public class MonitorTransmissoes implements Runnable {
                         .put("size", t.getRawData().size())
                         .put("rawData", t.getRawData());
 
-                MQTTClientManager.publicar(t.getIdEmissor(), j.toString().getBytes());
+                CTRBroker.mqttClient.publicar(t.getIdEmissor(), j.toString().getBytes());
             }
 
             try {

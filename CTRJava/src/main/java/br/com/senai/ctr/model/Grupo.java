@@ -54,11 +54,11 @@ public class Grupo implements IEntidade {
     }
 
     /* ESTRUTURA PARA FIREBASE */
-    public HashMap<String, Boolean> getUsuariosList() {
-        return gerarHashMapParaFirebase(usuarios);
+    public List<String> getUsuariosList() {
+        return gerarIDListParaFirebase(usuarios);
     }
 
-    public HashMap<String, Boolean> getEquipamentosList() {
-        return gerarHashMapParaFirebase(equipamentos);
+    public List<String> getEquipamentosList() {
+        return gerarIDListParaFirebase(equipamentos);
     }
 }
