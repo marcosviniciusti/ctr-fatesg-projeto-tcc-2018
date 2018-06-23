@@ -55,7 +55,7 @@ public class Equipamento implements IEntidade {
 
     public String getModeloEquipamento() {
         if (modelo != null) {
-            return modelo.getMarca().getId() + "/" + modelo.getId();
+            return modelo.getId();
         } else {
             return modeloEquipamento;
         }

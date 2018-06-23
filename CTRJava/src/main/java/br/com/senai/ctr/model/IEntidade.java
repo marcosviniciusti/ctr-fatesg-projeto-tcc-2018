@@ -8,18 +8,16 @@ public interface IEntidade {
 
     IEntidade setId(String id);
 
-    default HashMap<String, Boolean> gerarHashMapParaFirebase(List lst) {
-        return gerarHashMap(lst);
+    default List<String> gerarIDListParaFirebase(List lst) {
+        return gerarIDList(lst);
     }
 
-    static HashMap<String, Boolean> gerarHashMap(List lst) {
-        HashMap<String, Boolean> ret = new HashMap<>();
+    static List<String> gerarIDList(List lst) {
+        List<String> ret = new LinkedList<>();
+
         if (lst != null && lst.size() > 0) {
             for (Object obj : lst) {
-                ret.put(
-                        ((IEntidade) obj).getId(),
-                        true
-                );
+                ret.add(((IEntidade) obj).getId());
             }
         }
 

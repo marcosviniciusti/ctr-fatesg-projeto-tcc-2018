@@ -9,7 +9,6 @@ public class Emissor implements IEntidade {
 
     private String id;
     private String nome;
-    private List<Equipamento> equipamentos;
 
     @Exclude
     @Override
@@ -30,20 +29,5 @@ public class Emissor implements IEntidade {
     public Emissor setNome(String nome) {
         this.nome = nome;
         return this;
-    }
-
-    @Exclude
-    public List<Equipamento> getEquipamentos() {
-        return equipamentos;
-    }
-
-    public Emissor setEquipamentos(List<Equipamento> equipamentos) {
-        this.equipamentos = equipamentos;
-        return this;
-    }
-
-    /* ESTRUTURA PARA FIREBASE */
-    public HashMap<String, Boolean> getEquipamentosList() {
-        return gerarHashMapParaFirebase(equipamentos);
     }
 }

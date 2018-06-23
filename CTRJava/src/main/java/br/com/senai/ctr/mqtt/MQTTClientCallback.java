@@ -59,14 +59,6 @@ public class MQTTClientCallback implements MqttCallback {
                 e.printStackTrace();
             }
         }
-//        else {
-//            try {
-//                JSONObject recv = new JSONObject(mqttMessage.toString());
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//
-//            }
-//        }
     }
 
     @Override

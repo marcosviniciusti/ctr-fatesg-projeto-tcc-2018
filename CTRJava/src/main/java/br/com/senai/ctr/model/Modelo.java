@@ -11,7 +11,7 @@ public class Modelo implements IEntidade {
     private String nome;
     private Marca marca;
     private EnumTipoEquipamento tipo;
-    private HashMap<String, Comando> comandos;
+    private List<Comando> comandos;
 
     @Exclude
     @Override
@@ -44,7 +44,6 @@ public class Modelo implements IEntidade {
         return this;
     }
 
-    @Exclude
     public EnumTipoEquipamento getTipo() {
         return tipo;
     }
@@ -54,11 +53,12 @@ public class Modelo implements IEntidade {
         return this;
     }
 
-    public HashMap<String, Comando> getComandos() {
+    @Exclude
+    public List<Comando> getComandos() {
         return comandos;
     }
 
-    public Modelo setComandos(HashMap<String, Comando> comandos) {
+    public Modelo setComandos(List<Comando> comandos) {
         this.comandos = comandos;
         return this;
     }

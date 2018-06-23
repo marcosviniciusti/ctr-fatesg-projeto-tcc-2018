@@ -4,7 +4,6 @@ import br.com.senai.ctr.model.Emissor;
 import br.com.senai.ctr.model.Equipamento;
 import com.google.firebase.database.*;
 
-import javax.xml.crypto.Data;
 import java.util.LinkedList;
 import java.util.List;
 

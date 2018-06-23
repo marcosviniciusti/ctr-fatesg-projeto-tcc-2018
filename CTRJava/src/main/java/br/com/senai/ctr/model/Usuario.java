@@ -64,7 +64,7 @@ public class Usuario implements IEntidade {
     }
 
     /* ESTRUTURA PARA FIREBASE */
-    public HashMap<String, Boolean> getGruposList() {
-        return gerarHashMapParaFirebase(grupos);
+    public List<String> getGruposList() {
+        return gerarIDListParaFirebase(grupos);
     }
 }
