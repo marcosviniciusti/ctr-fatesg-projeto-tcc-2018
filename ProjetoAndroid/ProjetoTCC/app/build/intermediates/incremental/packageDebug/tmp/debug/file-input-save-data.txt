@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Jun 19 00:25:07 BRT 2018
+#Sun Jun 24 19:21:52 BRT 2018
 2.base=/media/marcos/Backup/Documentos/AndroidStudioProjects/ProjetoTCC/app/build/intermediates/transforms/dexMerger/debug/36
 5.set=DEX
 0.path=classes.dex

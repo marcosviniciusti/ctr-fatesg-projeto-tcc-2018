@@ -4,15 +4,10 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <!--<item-->
-        <!--android:id="@+id/btnSettings"-->
-        <!--android:icon="@drawable/ic_menu_manage"-->
-        <!--android:title="@string/action_settings" />-->
 
         <item
-            android:id="@+id/btnSignOut"
-            android:icon="@drawable/ic_menu_send"
-            android:title="@string/action_sign_out" />
+            android:id="@+id/btnSair"
+            android:icon="@drawable/ic_nav_sair"
+            android:title="@string/action_sair" />
     </group>
-
 </menu>

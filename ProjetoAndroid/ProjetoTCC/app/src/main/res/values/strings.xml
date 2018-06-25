@@ -1,97 +1,108 @@
 <resources>
 
+    <!-- Strings de títulos do app e telas do app -->
     <string name="app_name">ProjetoTCC</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="title_activity_grupos_equipamentos">Grupos de Equipamentos</string>
+    <string name="title_activity_equipamentos">Equipamentos</string>
+    <string name="title_activity_grupos_usuarios">ProjetoTCC</string>
 
-    <string name="title_activity_main">MainActivity</string>
+    <!-- String para funções de eventos -->
+    <string name="navigation_drawer_abrir">Abrir navigation drawer</string>
+    <string name="navigation_drawer_fechar">Fechar navigation drawer</string>
 
-    <!-- Strings related to login -->
-    <string name="hint_name">Nome do Usuário</string>
+    <!-- String de textos ocultos para campos editaveis -->
+    <string name="hint_nome">Nome do Usuário</string>
     <string name="hint_email">E-mail do Usuário</string>
-    <string name="hint_phone_number">Número de telefone</string>
-    <string name="hint_verification_code">Código de verificação</string>
-    <string name="hint_user_id">User ID</string>
-    <string name="hint_password">Senha</string>
-    <string name="hint_name_definition">Nome da Definição:</string>
+    <string name="hint_senha">Senha</string>
+    <string name="hint_nome_grupo_equipamentos">Nome do Grupo de Equipamentos:</string>
     <string name="hint_nav_header_desc">Navigation header</string>
 
+    <!-- String para campos visiveis -->
     <string name="text_email">E-mail:</string>
-    <string name="text_password">Senha:</string>
-    <string name="text_phone_number">Número de telefone:</string>
-    <string name="text_verification_code">Código de verificação:</string>
-    <string name="text_user_id">User ID:</string>
-    <string name="text_email_password_title">Email and Password</string>
-    <string name="text_email_password_status_fmt">Email User: %1$s (verified: %2$b)</string>
-    <string name="text_facebook_title">Facebook Login</string>
-    <string name="text_facebook_status_fmt">Facebook User: %s</string>
-    <string name="text_firebase_status_fmt">Firebase User: %s</string>
-    <string name="text_google_title">Google Sign In</string>
-    <string name="text_google_status_fmt">Google User: %s</string>
+    <string name="text_senha">Senha:</string>
+    <string name="text_telefone">Número de telefone:</string>
 
+
+    <!-- Strings para descrição de componentes -->
     <string name="desc_icon_app">Firebase logo and email</string>
 
-    <string name="action_create_account">Criar Conta</string>
-    <string name="action_send_link">Enviar Link</string>
-    <string name="action_verify_email">Verificar Email</string>
-    <string name="action_sign_in_register">Entrar ou Registrar</string>
-    <string name="action_sign_in">Entrar</string>
-    <string name="action_sign_out">Sair</string>
-    <string name="action_connect">Conectar</string>
-    <string name="action_disconnect">Desconectar</string>
-    <string name="action_run">Executar</string>
-    <string name="action_stop">Parar</string>
-    <string name="action_settings">Opções</string>
-    <string name="action_save">Salvar</string>
-    <string name="action_cancel">Cancelar</string>
-    <string name="action_update">Atualizar</string>
-    <string name="action_delete">Delete</string>
-    <string name="action_control">Controle Remoto</string>
+    <!-- Strings para botões -->
+    <string name="action_criar_conta">Criar Conta</string>
+    <string name="action_entrar">Entrar</string>
+    <string name="action_entrar_google">Entrar pelo Google</string>
+    <string name="action_grupos_equipamentos">Grupos de Equipamentos</string>
+    <string name="action_grupos_compartilhado">Grupos compartilhados</string>
+    <string name="action_sair">Sair</string>
+    <string name="action_conectar">Conectar</string>
+    <string name="action_desconectar">Desconectar</string>
+    <string name="action_executar">Executar</string>
+    <string name="action_parar">Parar</string>
+    <string name="action_opções">Opções</string>
+    <string name="action_salvar">Salvar</string>
+    <string name="action_cancelar">Cancelar</string>
+    <string name="action_atualizar">Atualizar</string>
+    <string name="action_deletar_grupo">Deletar Grupo</string>
+    <string name="action_deletar_equipamento">Deletar Equipamento</string>
+    <string name="action_adicionar_usuario">Adicionar Usuário</string>
+    <string name="action_remover_usuario">Remover Usuário</string>
+    <string name="action_abrir_controle_remoto">Controle Remoto</string>
+    <string name="action_btn25">Gelar - 25 Graus</string>
+    <string name="action_btn24">Gelar - 24 Graus</string>
+    <string name="action_btn23">Gelar - 23 Graus</string>
+    <string name="action_btn22">Gelar - 22 Graus</string>
+    <string name="action_btn21">Gelar - 21 Graus</string>
+    <string name="action_btn20">Gelar - 20 Graus</string>
+    <string name="action_btn19">Gelar - 19 Graus</string>
+    <string name="action_btn18">Gelar - 18 Graus</string>
+    <string name="action_btn17">Gelar - 17 Graus</string>
 
-    <string name="status_signed_in">Conectado</string>
-    <string name="status_signed_out">Desconectado</string>
-    <string name="status_loading">Carregando…</string>
-    <string name="status_code_sent">Código Enviado!</string>
-    <string name="status_verification_succeeded">Verificação Bem Sucedida!</string>
-    <string name="status_permission_rationale">
+    <!-- String para feedback de status -->
+    <string name="status_conectado">Conectado</string>
+    <string name="status_desconctado">Desconectado</string>
+    <string name="status_carregando">Carregando…</string>
+    <string name="status_permissao_contato">
         "As permissões de contatos são necessárias para fornecer conclusões de email."
     </string>
-    <string name="status_navigation_drawer_open">Open navigation drawer</string>
-    <string name="status_navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="error_invalid_email">Esse endereco de e-mail é inválido.</string>
-    <string name="error_invalid_password">Essa senha é muito curta.</string>
-    <string name="error_incorrect_email">Este e-mail não existe.</string>
-    <string name="error_incorrect_password">Esta senha está incorreta.</string>
-    <string name="error_field_required">Este campo é obrigatório.</string>
+
+    <!-- String para feedback de erros -->
+    <string name="error_email_invalido">Esse endereco de e-mail é inválido.</string>
+    <string name="error_senha_invalida">Essa senha é muito curta.</string>
+    <string name="error_email_inexistente">Este e-mail não existe.</string>
+    <string name="error_senha_incorreta">Esta senha está incorreta.</string>
+    <string name="error_campo_obrigatorio">Este campo é obrigatório.</string>
     <string name="error_verification_failed">Falha na Verificação.</string>
-    <string name="error_sign_in_failed">Falha na Conexão.</string>
-    <string name="error_auth_failed">Falha na Autenticação.</string>
+    <string name="error_falha_entrar">Falha na Conexão.</string>
+    <string name="error_falha_autenticacao">Falha na Autenticação.</string>
     <string name="error_message_email">There is no user record corresponding to this identifier. The user may have been deleted.</string>
     <string name="error_message_password">The password is invalid or the user does not have a password.</string>
-    <string name="action_open">Abrir</string>
+    <string name="action_abrir_grupo">Abrir Grupo</string>
 
 
-    <!-- String for spinners -->
+
+    <!-- String para os spinners -->
     <string-array name="spinner_marca">
-        <item>Lg</item>
-        <item>Samsung</item>
-        <item>Sony</item>
+        <item>LG</item>
+        <item>SAMSUNG</item>
+        <item>SONY</item>
     </string-array>
 
     <string-array name="spinner_modelo">
-        <item>teste 1</item>
-        <item>teste 2</item>
-        <item>teste 3</item>
+        <item>modelo 1</item>
+        <item>modelo 2</item>
+        <item>modelo 3</item>
     </string-array>
 
     <string-array name="spinner_tipo">
         <item>Ar-Condicionado</item>
         <item>Datashow</item>
         <item>Tv</item>
+    </string-array>
+
+    <string-array name="spinner_emissor">
+        <item>emissor 1</item>
+        <item>emissor 2</item>
+        <item>emissor 3</item>
     </string-array>
 
 </resources>

@@ -3,28 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/btnConnect"
+        android:id="@+id/btnAbrirGrupo"
         android:orderInCategory="100"
-        android:title="@string/action_connect"
+        android:title="@string/action_abrir_grupo"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/btnDisconnect"
+        android:id="@+id/btnDeletarGrupo"
         android:orderInCategory="100"
-        android:title="@string/action_disconnect"
+        android:title="@string/action_deletar_grupo"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/btnOpen"
+        android:id="@+id/btnAdicionarUsuario"
         android:orderInCategory="100"
-        android:title="@string/action_open"
+        android:title="@string/action_adicionar_usuario"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/btnDelete"
+        android:id="@+id/btnRemoverUsuario"
         android:orderInCategory="100"
-        android:title="@string/action_delete"
+        android:title="@string/action_remover_usuario"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/btnControlRemote"
+        android:id="@+id/btnControleRemoto"
         android:orderInCategory="100"
-        android:title="@string/action_control"
+        android:title="@string/action_abrir_controle_remoto"
         app:showAsAction="never" />
 </menu>
