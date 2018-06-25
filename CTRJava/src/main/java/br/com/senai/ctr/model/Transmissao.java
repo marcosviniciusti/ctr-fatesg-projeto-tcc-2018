@@ -13,7 +13,6 @@ public class Transmissao implements IEntidade {
     private Usuario usuario;
     private Equipamento equipamento;
 
-    @Exclude
     @Override
     public String getId() {
         return id;

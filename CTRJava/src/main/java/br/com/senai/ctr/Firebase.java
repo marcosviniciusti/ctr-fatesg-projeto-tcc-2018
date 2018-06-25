@@ -15,11 +15,13 @@ public class Firebase {
     public static void inicializarFirebase() {
         try {
             FileInputStream serviceAccount =
-                    new FileInputStream("firebase/irduino-ec7c4-firebase-adminsdk-k61mq-84974b6885.json");
+//                    new FileInputStream("firebase/irduino-ec7c4-firebase-adminsdk-k61mq-84974b6885.json");
+                    new FileInputStream("firebase/projetotcc-989c0-firebase-adminsdk-zqhuq-56fc7391d5.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://irduino-ec7c4.firebaseio.com")
+//                    .setDatabaseUrl("https://irduino-ec7c4.firebaseio.com")
+                    .setDatabaseUrl("https://projetotcc-989c0.firebaseio.com")
                     .build();
 
             FirebaseApp.initializeApp(options);
@@ -32,7 +34,7 @@ public class Firebase {
     }
 
     public static DatabaseReference getReference() {
-        return FirebaseDatabase.getInstance().getReference();
+        return FirebaseDatabase.getInstance().getReference("CTR");
     }
 
 }

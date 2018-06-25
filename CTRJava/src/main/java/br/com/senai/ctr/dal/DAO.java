@@ -98,10 +98,6 @@ public abstract class DAO<T extends IEntidade> {
         return map.get(id);
     }
 
-//    public T syncRetrieveByPath() {
-//        DatabaseReference objRef = reference.child(child)
-//    }
-
     HashMap<String, Boolean> syncRetrieveReferences(T obj, String listFieldName) {
         if (obj == null || obj.getId() == null) {
             return null;
