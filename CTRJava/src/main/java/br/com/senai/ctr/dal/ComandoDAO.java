@@ -1,16 +1,14 @@
 package br.com.senai.ctr.dal;
 
-import br.com.senai.ctr.model.Emissor;
-import br.com.senai.ctr.model.Equipamento;
+import br.com.senai.ctr.model.Comando;
 import com.google.firebase.database.*;
 
-import java.util.LinkedList;
-import java.util.List;
+public class ComandoDAO extends DAO<Comando> {
 
-public class EquipamentoDAO extends DAO<Equipamento> {
+    private DatabaseReference reference;
 
-    public EquipamentoDAO(DatabaseReference reference) {
-        super(reference, "equipamentos");
+    public ComandoDAO(DatabaseReference reference) {
+        super(reference, "comandos");
     }
 
     @Override
@@ -18,7 +16,7 @@ public class EquipamentoDAO extends DAO<Equipamento> {
         return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Equipamento obj = snapshot.getValue(Equipamento.class);
+                Comando obj = snapshot.getValue(Comando.class);
                 obj.setId(snapshot.getKey());
 
                 map.put(snapshot.getKey(), obj);
@@ -31,24 +29,18 @@ public class EquipamentoDAO extends DAO<Equipamento> {
         };
     }
 
-    public List<Equipamento> syncRetrieveEquipamentosByEmissor(Emissor emissor) {
-        return syncRetrieveEquipamentosByEmissor(emissor.getId());
-    }
-
-    public List<Equipamento> syncRetrieveEquipamentosByEmissor(String idEmissor) {
-        List<Equipamento> equipamentos = new LinkedList<>();
+    public Comando syncRetrieveComando(String idMarca, String idModelo, String idComando) {
+        final Comando[] comando = new Comando[1];
         final boolean[] buscando = new boolean[]{true};
 
-        Query query = reference.child(child).orderByChild("emissorEquipamento").equalTo(idEmissor);
+        Query query = reference
+                .child("marcas").child(idMarca)
+                .child("modelos").child(idModelo)
+                .child("comandos").child(idComando);
         ValueEventListener listener = query.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot s : snapshot.getChildren()) {
-                    Equipamento e = s.getValue(Equipamento.class);
-                    e.setId(s.getKey());
-                    equipamentos.add(e);
-                }
+                comando[0] = snapshot.getValue(Comando.class);
                 buscando[0] = false;
             }
 
@@ -67,7 +59,6 @@ public class EquipamentoDAO extends DAO<Equipamento> {
         }
         query.removeEventListener(listener);
 
-        return equipamentos;
+        return comando[0];
     }
-
 }

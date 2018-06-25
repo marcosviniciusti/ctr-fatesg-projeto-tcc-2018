@@ -1,12 +1,11 @@
 package br.com.senai.ctr.dal;
 
-import br.com.senai.ctr.App;
-import br.com.senai.ctr.model.Comando;
 import br.com.senai.ctr.model.Equipamento;
 import br.com.senai.ctr.model.Transmissao;
 import com.google.firebase.database.*;
 
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TransmissaoDAO extends DAO<Transmissao> {
 
@@ -32,96 +31,45 @@ public class TransmissaoDAO extends DAO<Transmissao> {
         };
     }
 
-    public void syncTransmissaoByEmissor(final String id_emissor, final ConcurrentLinkedDeque<Transmissao> transmissoes) {
+    public List<Transmissao> syncRetrieveTransmissoesPendentesByEquipamento(Equipamento equipamento) {
+        return syncRetrieveTransmissoesPendentesByEquipamento(equipamento.getId());
+    }
 
-        reference.child("equipamentos").orderByChild("emissorEquipamento").equalTo(id_emissor)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot snapshot, String previousChildName) {
-                        Equipamento e = snapshot.getValue(Equipamento.class);
-                        e.setId(snapshot.getKey());
-                        System.out.println(e.getId());
+    public List<Transmissao> syncRetrieveTransmissoesPendentesByEquipamento(String idEquipamento) {
+        List<Transmissao> transmissoes = new LinkedList<>();
+        final boolean[] buscando = new boolean[]{true};
 
-                        reference.child("transmissoes").orderByChild("equipamentoTransmissao").equalTo(e.getId())
-                                .addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot snapshot, String previousChildName) {
-                                        Transmissao t = snapshot.getValue(Transmissao.class);
-                                        t.setId(snapshot.getKey());
-                                        System.out.println(e.getModeloEquipamento());
-                                        System.out.println(t.getId());
+        Query query = reference.child(child).orderByChild("equipamentoTransmissao").equalTo(idEquipamento);
+        ValueEventListener listener = query.addValueEventListener(new ValueEventListener() {
 
-//                                        String[] modelo = e.getModeloEquipamento().split("/");
-//                                        if (modelo.length == 2) {
-//                                            reference
-//                                                    .child("marcas")
-//                                                    .child(modelo[0])
-//                                                    .child("modelos")
-//                                                    .child(modelo[1])
-//                                                    .child("comandos").child(t.getComandoTransmissao())
-//                                                    .addValueEventListener(new ValueEventListener() {
-//                                                        @Override
-//                                                        public void onDataChange(DataSnapshot snapshot) {
-//                                                            Comando c = snapshot.getValue(Comando.class);
-//                                                            c.setId(snapshot.getKey());
-//
-//                                                            t.setComando(c);
-//                                                            System.out.println(c.getId());
-//                                                            System.out.println(c.getRawData().size());
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onCancelled(DatabaseError error) {
-//
-//                                                        }
-//                                                    });
-//                                        }
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot s : snapshot.getChildren()) {
+                    Transmissao e = s.getValue(Transmissao.class);
+                    if (e.getDtHrTransmissao() == null) {
+                        e.setId(s.getKey());
 
-
-                                    }
-
-                                    @Override
-                                    public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot snapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot snapshot, String previousChildName) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError error) {
-
-                                    }
-                                });
+                        transmissoes.add(e);
                     }
+                }
+                buscando[0] = false;
+            }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot snapshot, String previousChildName) {
+            @Override
+            public void onCancelled(DatabaseError error) {
 
-                    }
+            }
+        });
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot snapshot) {
+        while (buscando[0]) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+//                e.printStackTrace();
+            }
+        }
+        query.removeEventListener(listener);
 
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot snapshot, String previousChildName) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-
-                    }
-                });
-
+        return transmissoes;
     }
 }

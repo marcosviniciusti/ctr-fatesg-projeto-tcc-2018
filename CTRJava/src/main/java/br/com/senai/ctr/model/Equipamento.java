@@ -51,18 +51,14 @@ public class Equipamento implements IEntidade {
     }
 
     /* ESTRUTURA PARA FIREBASE */
-    public String getModeloEquipamento() {
-        return modelo.getMarca().getId() + "/" + modelo.getId();
-    }
+    private String modeloEquipamento;
 
-    public Equipamento setModeloEquipamento(String modeloEquipamento) {
-        String[] dados = modeloEquipamento.split("/");
-        if (dados.length == 2) {
-            modelo = new Modelo()
-                    .setId(dados[1])
-                    .setMarca(new Marca().setId(dados[0]));
+    public String getModeloEquipamento() {
+        if (modelo != null) {
+            return modelo.getId();
+        } else {
+            return modeloEquipamento;
         }
-        return this;
     }
 
     public String getEmissorEquipamento() {
