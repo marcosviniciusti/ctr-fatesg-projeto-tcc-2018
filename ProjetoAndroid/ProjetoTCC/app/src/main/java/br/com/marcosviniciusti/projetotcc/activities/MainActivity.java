@@ -35,9 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.marcosviniciusti.projetotcc.R;
+import br.com.marcosviniciusti.projetotcc.entidade.EModelo;
 import br.com.marcosviniciusti.projetotcc.negocio.NEquipamento;
 import br.com.marcosviniciusti.projetotcc.negocio.NFirebaseAuth;
 import br.com.marcosviniciusti.projetotcc.negocio.NGrupoEquipamento;
+import br.com.marcosviniciusti.projetotcc.negocio.NModelo;
 import br.com.marcosviniciusti.projetotcc.negocio.NUsuario;
 import br.com.marcosviniciusti.projetotcc.entidade.EEquipamento;
 import br.com.marcosviniciusti.projetotcc.entidade.EGrupoEquipamento;
@@ -84,9 +86,10 @@ public class MainActivity extends BaseActivity
     private List<String> listaUsuarios;
     private List<EUsuario> grupoUsuarios;
     private List<EEquipamento> listaEquipamentos;
+    private EUsuario usuario = new EUsuario();
     private EGrupoEquipamento grupoEquipamento;
     private EEquipamento equipamento;
-    private EUsuario usuario = new EUsuario();
+    private EModelo modelo;
     private Handler handler;
 
     // Atributos do Firebase.
@@ -94,6 +97,7 @@ public class MainActivity extends BaseActivity
     private NUsuario nUsuario;
     private NGrupoEquipamento nGrupoEquipamento;
     private NEquipamento nEquipamento;
+    private NModelo nModelo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +168,7 @@ public class MainActivity extends BaseActivity
         nUsuario = new NUsuario();
         nGrupoEquipamento = new NGrupoEquipamento();
         nEquipamento = new NEquipamento();
+        nModelo = new NModelo();
     }
 
     // Cria eventos;
@@ -405,6 +410,22 @@ public class MainActivity extends BaseActivity
                     }
                 });
 
+                nModelo.listar(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            EModelo modeloAux = child.getValue(EModelo.class);
+                            if (modelo.getId().equals(equipamento.getModelo())) {
+                                modelo = modeloAux;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         } catch (Exception error) {
             Log.e(TAG, "ERRO no método consultarBancoDeDados: "+error.getMessage(), error);
@@ -458,15 +479,6 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-
-        if (window.equals(EQUIPAMENTO)) {
-            toolbar.getMenu().findItem(R.id.btnAbrirGrupo).setVisible(false);
-            toolbar.getMenu().findItem(R.id.btnDeletarGrupo).setTitle(getString(R.string.action_deletar_equipamento));
-            toolbar.getMenu().getItem(R.id.btnAdicionarUsuario).setVisible(false);
-            toolbar.getMenu().getItem(R.id.btnRemoverUsuario).setVisible(false);
-            toolbar.getMenu().getItem(R.id.btnControleRemoto).setVisible(true);
-        }
-
         return true;
     }
 
@@ -541,9 +553,9 @@ public class MainActivity extends BaseActivity
             }
         }
         if (id == R.id.btnControleRemoto) {
-            if (equipamento.getModelo().getTipo().equals(EnumTipoEquipamento.TV)) {
+            if (modelo.getTipo().equals(EnumTipoEquipamento.TV)) {
                 startActivity(criarIntent(this, RemoteControlActivity.class, grupoEquipamento, viewPosicao, null));
-            } else if (equipamento.getModelo().getTipo().equals(EnumTipoEquipamento.PROJETOR)) {
+            } else if (modelo.getTipo().equals(EnumTipoEquipamento.PROJETOR)) {
                 startActivity(criarIntent(this, RemoteControlActivity.class, grupoEquipamento, viewPosicao, null));
             } else {
                 startActivity(criarIntent(this, RemoteControlActivity.class, grupoEquipamento, viewPosicao, null));

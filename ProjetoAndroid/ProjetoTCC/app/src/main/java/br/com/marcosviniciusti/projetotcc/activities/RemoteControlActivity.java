@@ -1,8 +1,8 @@
 package br.com.marcosviniciusti.projetotcc.activities;
 
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +26,7 @@ import br.com.marcosviniciusti.projetotcc.negocio.NComando;
 import br.com.marcosviniciusti.projetotcc.negocio.NFirebaseAuth;
 import br.com.marcosviniciusti.projetotcc.negocio.NMarca;
 import br.com.marcosviniciusti.projetotcc.negocio.NModelo;
+import br.com.marcosviniciusti.projetotcc.negocio.NTransmissao;
 import br.com.marcosviniciusti.projetotcc.util.EnumTipoEquipamento;
 
 
@@ -62,6 +63,7 @@ public class RemoteControlActivity extends AppCompatActivity {
     private NMarca nMarca;
     private NModelo nModelo;
     private NComando nComando;
+    private NTransmissao nTransmissao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +151,8 @@ public class RemoteControlActivity extends AppCompatActivity {
                 Log.e(TAG, "ERRO ao listar comandos.");
             }
         });
+
+        nTransmissao = new NTransmissao();
     }
 
     private void definirContentView() {
@@ -195,7 +199,7 @@ public class RemoteControlActivity extends AppCompatActivity {
                     EComando comando = new EComando();
                     for (int i=0; i<comandos.size(); i++) {
                         EComando c = comandos.get(i);
-                        if (c.getNome().equals("Power OFF")) {
+                        if (c.getNome().equals("Power")) {
                             comando = c;
                         }
                     }
@@ -204,116 +208,333 @@ public class RemoteControlActivity extends AppCompatActivity {
                     transmissao.setDtHrSubmissao(new Date());
                     transmissao.setEquipamento(equipamento);
                     transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabVolUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabVolDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabChUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabChDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
         } else if (igualTipoProjetor()) {
             fabPower.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabVolUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabVolDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabChUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             fabChDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
         } else {
             btn25.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn24.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn23.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn22.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn21.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn20.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn19.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn18.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
             btn17.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    EComando comando = new EComando();
+                    for (int i=0; i<comandos.size(); i++) {
+                        EComando c = comandos.get(i);
+                        if (c.getNome().equals("Power")) {
+                            comando = c;
+                        }
+                    }
+                    transmissao = new ETransmissao();
+                    transmissao.setComando(comando.getId());
+                    transmissao.setDtHrSubmissao(new Date());
+                    transmissao.setEquipamento(equipamento);
+                    transmissao.setIdUsuario(nFirebaseAuth.getUser().getUid());
+                    nTransmissao.salvar(transmissao);
                 }
             });
         }
